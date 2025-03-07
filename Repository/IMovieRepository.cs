@@ -10,5 +10,6 @@ namespace Movies.Repository
         Task AddAsync(RequestMovieDTO movie);
         Task UpdateAsync(RequestMovieDTO movie);
         Task DeleteAsync(int id);
+
     }
 }

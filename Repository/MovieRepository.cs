@@ -1,7 +1,7 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Movies.Models;
 using Movies.RequestDTO;
+using Movies.ResponseDTO;
 
 namespace Movies.Repository
 {
@@ -61,6 +61,37 @@ namespace Movies.Repository
             }).ToList();
         }
 
+        public async Task<HomeResponse> GetHomeMovies()
+        {
+            var posters = _context.Movies.Select(x => new ResponseMovieDTO
+            {
+                MovieId = x.MovieId,
+                Title = x.Title,
+                AvatarUrl= x.AvatarUrl
+            }).Where(y => y.PosterUrl != null).Take(3);
+            var actionMovies = _context.Movies.Select(x => new
+            {
+                x.MovieId,
+                Categories = x.MovieCategories.Select(y => y.CategoriesID == 1).ToList()
+            }).ToList();
+            var home = new HomeResponse
+            {
+                PosterMovies = posters,
+                ActionMovies = (IEnumerable<ResponseMovieDTO>)actionMovies
+            };
+            var movies = await _context.Movies.ToListAsync();
+            movies.Select(movie => new ResponseMovieDTO
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                Description = movie.Description,
+                Rating = movie.Rating,
+                PosterUrl = movie.PosterUrl,
+                AvatarUrl = movie.AvatarUrl,
+                LinkFilmUrl = movie.LinkFilmUrl
+            }).ToList();
+        }
+
         public async Task AddAsync(RequestMovieDTO movieDTO)
         {
             var newMovie = new Movie
@@ -99,8 +130,7 @@ namespace Movies.Repository
 
         Task<RequestMovieDTO> IMovieRepository.GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+          
         }
     }
 }
-
