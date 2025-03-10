@@ -7,7 +7,7 @@ namespace Movies.RequestDTO;
 public partial class RequestActorDTO
 {
    
-    public int ActorsId { get; set; }
+    public int ActorsID { get; set; }
 
     public string NameAct { get; set; } = null!;
 

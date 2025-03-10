@@ -7,10 +7,10 @@ public partial class Episode
 {
     [Key]
     [Column("EpisodeID")]
-    public int EpisodeId { get; set; }
+    public int EpisodeID { get; set; }
 
     [Column("SeriesID")]
-    public int? SeriesId { get; set; }
+    public int? SeriesID { get; set; }
 
     public int EpisodeNumber { get; set; }
 

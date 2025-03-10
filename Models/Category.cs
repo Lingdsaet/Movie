@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Movies.Models;
 
 namespace Movies.Models;
 
@@ -9,17 +10,17 @@ public partial class Category
 {
     [Key]
     [Column("CategoriesID")]
-    public int CategoriesId { get; set; }
+    public int CategoriesID { get; set; }
 
     [StringLength(50)]
     public string CategoryName { get; set; } = null!;
 
-    [ForeignKey("CategoriesId")]
+    [ForeignKey("CategoriesID")]
     [InverseProperty("Categories")]
     public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();
 
-    [ForeignKey("CategoriesId")]
-    [InverseProperty("Categories")]
-    public virtual ICollection<Series> Series { get; set; } = new List<Series>();
-    public object? MovieCategory { get; internal set; }
+    //[ForeignKey("CategoriesID")]
+    //[InverseProperty("Categories")]
+    //public virtual ICollection<Series> Series { get; set; } = new List<Series>();
+    public ICollection<MovieCategory> MovieCategory { get; set; } = new List<MovieCategory>();
 }

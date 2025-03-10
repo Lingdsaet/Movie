@@ -15,7 +15,7 @@ public partial class Movie
     public string? Description { get; set; }
 
     [Column("DirectorID")]
-    public int? DirectorId { get; set; }
+    public int? DirectorID { get; set; }
 
     [Column(TypeName = "decimal(3, 1)")]
     public decimal? Rating { get; set; }
@@ -32,7 +32,13 @@ public partial class Movie
     [StringLength(255)]
     public string? LinkFilmUrl { get; set; }
 
-    [ForeignKey("DirectorId")]
+    [Column("IsHot")]
+    public bool? IsHot { get; set; }
+
+    [Column("YearReleased")]
+    public DateTime? YearReleased { get; set; }
+
+    [ForeignKey("DirectorID")]
     [InverseProperty("Movies")]
     public virtual Director? Director { get; set; }
 
@@ -40,12 +46,13 @@ public partial class Movie
     //public required ICollection<MovieActor> MovieActors { get; set; }
     //public required ICollection<MovieCategory> MovieCategories { get; set; }
 
-    [ForeignKey("MovieId")]
+    [ForeignKey("MovieID")]
     [InverseProperty("Movies")]
     public virtual ICollection<Actor> Actors { get; set; } = new List<Actor>();
 
-    [ForeignKey("MovieId")]
+    [ForeignKey("MovieID")]
     [InverseProperty("Movies")]
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
-    public object? MovieCategory { get; internal set; }
+    public virtual ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();
+    public virtual ICollection<MovieCategory> MovieCategories { get; set; } = new List<MovieCategory>();
 }
