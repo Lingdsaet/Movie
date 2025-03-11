@@ -9,7 +9,7 @@ namespace Movies.Models
         public int CategoriesID { get; set; }
         [ForeignKey("MovieID")]
         public required Movie Movie { get; set; }
-        [ForeignKey("CategoryID")]
+        [ForeignKey("CategoriesID")]
         public required Category Category { get; set; }
     }
 }

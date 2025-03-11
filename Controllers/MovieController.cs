@@ -15,80 +15,78 @@ namespace Movies.Controllers
         {
             _movieRepository = movieRepository;
         }
-        // Lấy danh sách phim
-        [HttpGet("GetMovies")]
-        public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetMovies()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetMovies(
+            int pageNumber = 1,
+            int pageSize = 10,
+            int? categoryID = null,
+            string sortBy = "Title",
+            string search = ""
+            )
         {
-            var movies = await _movieRepository.GetAllAsync();
+            var movies = await _movieRepository.GetMoviesAsync(pageNumber, pageSize, sortBy, search, categoryID);
             return Ok(movies);
         }
 
-        [HttpGet("GetHomeMovies")]
-        public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetHomeMovies()
+        //  Thêm phim
+        [HttpPost]
+        public async Task<ActionResult<RequestMovieDTO>> AddMovie([FromBody] RequestMovieDTO request)
         {
-            var movies = await _movieRepository.GetHomeMovies();
-            return Ok(movies);
+            if (request == null)
+            {
+                return BadRequest("Invalid movie data.");
+            }
+
+            var movie = await _movieRepository.AddAsync(request);
+            return CreatedAtAction(nameof(GetMovies), new { id = movie.MovieId }, movie);
         }
 
-        //  Lấy phim theo ID
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RequestMovieDTO>> GetByIdAsync(int id)
+        // Sửa phim
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMovie(int id, [FromBody] RequestMovieDTO request)
+        {
+            if (request == null || id != request.MovieId)
+            {
+                return BadRequest("Invalid data");
+            }
+
+            var movie = await _movieRepository.UpdateAsync(request);
+            if (movie == null)
+            {
+                return NotFound("Movie not found");
+            }
+
+            return NoContent();
+        }
+
+        // Xoá mềm (chuyển status từ 1 -> 0)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> SoftDeleteMovie(int id)
         {
             var movie = await _movieRepository.GetByIdAsync(id);
             if (movie == null)
             {
-                return NotFound(new { Message = "Phim không tồn tại!" });
+                return NotFound("Movie not found");
             }
-            return Ok(movie);
+
+            await _movieRepository.SoftDeleteAsync(id);
+            return NoContent();
         }
 
-        // Thêm phim mới
-        //[HttpPost]
-        ////[Route("ADD")]
-        //public async Task<ActionResult<Movie>> AddMovie([FromBody] RequestMovieDTO request)
+        //// Lịch sử xoá (phim có Status = 0)
+        //[HttpGet("deleted")]
+        //public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetDeletedMovies()
         //{
-        //    if (request == null)
-        //    {
-        //        return BadRequest(new { Message = "Dữ liệu không hợp lệ!" });
-        //    }
-
-        //    var RequestMovieDTO = new RequestMovieDTO
-        //    {
-        //        Title = request.Title,
-        //        Description = request.Description,
-        //        DirectorID = request.DirectorID,
-        //        Rating = request.Rating,
-        //        PosterUrl = request.PosterUrl,
-        //        AvatarUrl = request.AvatarUrl,
-        //        LinkFilmUrl = request.LinkFilmUrl,
-        //    };
-            
-        //    await _movieRepository.AddAsync(RequestMovieDTO);
-        //    return CreatedAtAction(nameof(GetByIdAsync), new { id = RequestMovieDTO.MovieId }, RequestMovieDTO);
+        //    var movies = await _movieRepository.SoftDeleteAsync();
+        //    return Ok(movies);
         //}
 
-        // Cập nhật phim
-        //[HttpPut("{id}")]
-        ////[Route("update")]
-        //public async Task<ActionResult> UpdateMovie(int id, [FromBody] RequestMovieDTO request)
+        ////  Xoá vĩnh viễn các phim có Status = 0
+        //[HttpDelete("deleted")]
+        //public async Task<IActionResult> DeleteDeletedMovies()
         //{
-        //    var movie = await _movieRepository.GetByIdAsync(id);
-        //    if (movie == null)
-        //    {
-        //        return NotFound(new { Message = "Phim không tồn tại!" });
-        //    }
-
-        //    movie.Title = request.Title;
-        //    movie.Description = request.Description;
-        //    movie.DirectorID = request.DirectorID;
-        //    movie.Rating = request.Rating;
-        //    movie.PosterUrl = request.PosterUrl;
-        //    movie.AvatarUrl = request.AvatarUrl;
-        //    movie.LinkFilmUrl = request.LinkFilmUrl;
-
-        //    await _movieRepository.UpdateAsync(movie);
-        //    return Ok(new { Message = "Cập nhật phim thành công!" });
+        //    await _movieRepository.DeleteDeletedMoviesAsync();
+        //    return NoContent();
         //}
-
     }
 }

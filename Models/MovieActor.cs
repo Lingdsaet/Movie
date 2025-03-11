@@ -4,12 +4,11 @@ namespace Movies.Models
 {
     public class MovieActor
     {
-        public int MovieActorID { get; set; }
         public int MovieID { get; set; }
         public int ActorsID { get; set; }
         [ForeignKey("MovieID")]
         public required Movie Movie { get; set; }
-        [ForeignKey("ActorID")]
+        [ForeignKey("ActorsID")]
         public required Actor Actor { get; set; }
     }
 }

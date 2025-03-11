@@ -54,12 +54,13 @@ public partial class movieDB : DbContext
 
         //    entity.HasOne(d => d.Series).WithMany(p => p.Episodes).HasConstraintName("FK__Episodes__Series__49C3F6B7");
         //});
+        // MovieActor
         modelBuilder.Entity<MovieActor>()
-      .HasKey(ma => new { ma.MovieID, ma.ActorsID });
+            .HasKey(ma => new { ma.MovieID, ma.ActorsID });
 
         modelBuilder.Entity<MovieActor>()
             .HasOne(ma => ma.Movie)
-            .WithMany(m => m.MovieActors)
+            .WithMany(m => m.MovieActor)
             .HasForeignKey(ma => ma.MovieID)
             .HasConstraintName("FK_MovieActor_Movie");
 
@@ -68,8 +69,24 @@ public partial class movieDB : DbContext
             .WithMany(a => a.MovieActor)
             .HasForeignKey(ma => ma.ActorsID)
             .HasConstraintName("FK_MovieActor_Actor");
+        // MovieCategory
+        modelBuilder.Entity<MovieCategory>()
+            .HasKey(mc => new { mc.MovieID, mc.CategoriesID });
 
-        modelBuilder.Entity<Movie>(entity =>
+        modelBuilder.Entity<MovieCategory>()
+            .HasOne(mc => mc.Movie)
+            .WithMany(m => m.MovieCategory)
+            .HasForeignKey(mc => mc.MovieID)
+            .HasConstraintName("FK_MovieCategory_Movie");
+
+        modelBuilder.Entity<MovieCategory>()
+            .HasOne(mc => mc.Category)
+            .WithMany(c => c.MovieCategory)
+            .HasForeignKey(mc => mc.CategoriesID)
+            .HasConstraintName("FK_MovieCategory_Category");
+    
+
+    modelBuilder.Entity<Movie>(entity =>
         {
             entity.HasKey(e => e.MovieId).HasName("PK__Movies__4BD2943AD52A39F2");
 

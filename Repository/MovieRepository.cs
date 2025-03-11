@@ -16,19 +16,87 @@ namespace Movies.Repository
             _context = context;
         }
 
-   
-        public async Task<IEnumerable<RequestMovieDTO>> GetMoviesAsync(int pageNumber, int pageSize, string sortBy, string search)
+        public async Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO)
+        {
+            var movie = new Movie
+            {
+                Title = movieDTO.Title,
+                Description = movieDTO.Description,
+                Rating = movieDTO.Rating,
+                PosterUrl = movieDTO.PosterUrl,
+                AvatarUrl = movieDTO.AvatarUrl,
+                LinkFilmUrl = movieDTO.LinkFilmUrl,
+                DirectorID = movieDTO.DirectorID,
+                IsHot = movieDTO.IsHot,
+                YearReleased = movieDTO.YearReleased,
+                Status = 1
+            };
+
+            _context.Movies.Add(movie);
+            await _context.SaveChangesAsync();
+
+            return movieDTO;
+        }
+
+        public async Task<RequestMovieDTO?> GetByIdAsync(int id)
+        {
+            var movie = await _context.Movies.FindAsync(id);
+            if (movie == null) return null;
+
+            return new RequestMovieDTO
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                Description = movie.Description,
+                Rating = movie.Rating,
+                PosterUrl = movie.PosterUrl,
+                AvatarUrl = movie.AvatarUrl,
+                LinkFilmUrl = movie.LinkFilmUrl,
+                DirectorID = movie.DirectorID,
+                DirectorName = movie.Director?.NameDir,
+                IsHot = movie.IsHot,
+                YearReleased = movie.YearReleased
+
+            };
+        }
+
+        // Sửa 
+        public async Task<RequestMovieDTO?> UpdateAsync(RequestMovieDTO movieDTO)
+        {
+            var movie = await _context.Movies.FindAsync(movieDTO.MovieId);
+            if (movie == null) return null;
+
+            movie.Title = movieDTO.Title;
+            movie.Description = movieDTO.Description;
+            movie.Rating = movieDTO.Rating;
+            movie.PosterUrl = movieDTO.PosterUrl;
+            movie.AvatarUrl = movieDTO.AvatarUrl;
+            movie.LinkFilmUrl = movieDTO.LinkFilmUrl;
+            movie.DirectorID = movieDTO.DirectorID;
+            movie.IsHot = movieDTO.IsHot;
+            movie.YearReleased = movie.YearReleased;
+
+            await _context.SaveChangesAsync();
+            return movieDTO;
+        }
+
+        public async Task<IEnumerable<RequestMovieDTO>> GetMoviesAsync(int pageNumber, int pageSize, string sortBy, string search, int? categoryID)
         {
             var query = _context.Movies
                 .Include(m => m.Director)
-                .Include(m => m.MovieActors).ThenInclude(ma => ma.Actor)
-                .Include(m => m.MovieCategories).ThenInclude(mc => mc.Category)
+                .Include(m => m.MovieActor).ThenInclude(ma => ma.Actor)
+                .Include(m => m.MovieCategory).ThenInclude(mc => mc.Category)
                 .Where(m => m.Status == 1);
 
-            // 🔎 Filtering
+            //  Filtering
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(m => m.Title.Contains(search) || m.Description.Contains(search));
+                query = query.Where(m => m.Title.Contains(search));
+            }
+
+            if (categoryID.HasValue)
+            {
+                query = query.Where(m => m.MovieCategory.Any(mc => mc.CategoriesID == categoryID.Value));
             }
 
             //  Sorting
@@ -54,151 +122,20 @@ namespace Movies.Repository
                 AvatarUrl = m.AvatarUrl,
                 LinkFilmUrl = m.LinkFilmUrl,
                 DirectorID = m.DirectorID,
-                DirectorName = m.Director?.NameDir
+                DirectorName = m.Director?.NameDir,
+                Actors = m.MovieActor.Select(ma => new RequestActorDTO
+                 {
+                     ActorsID = ma.Actor.ActorsID,
+                    NameAct = ma.Actor.NameAct
+                 }).ToList(),
+                Categories = m.MovieCategory.Select(mc => new RequestCategoryDTO
+                {
+                    CategoriesID = mc.Category.CategoriesID,
+                    CategoryName = mc.Category.CategoryName
+                }).ToList()
             }).ToList();
         }
-        public async Task<RequestMovieDTO?> GetByIdAsync(int id)
-        {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null) return null;
-
-            return new RequestMovieDTO
-            {
-                MovieId = movie.MovieId,
-                Title = movie.Title,
-                Description = movie.Description,
-                Rating = movie.Rating,
-                PosterUrl = movie.PosterUrl,
-                AvatarUrl = movie.AvatarUrl,
-                LinkFilmUrl = movie.LinkFilmUrl,
-                DirectorID = movie.DirectorID,
-                DirectorName = movie.Director?.NameDir
-            };
-        }
-
-        //public async Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO)
-        //{
-        //    var movie = new Movie
-        //    {
-        //        Title = movieDTO.Title,
-        //        Description = movieDTO.Description,
-        //        Rating = movieDTO.Rating,
-        //        PosterUrl = movieDTO.PosterUrl,
-        //        AvatarUrl = movieDTO.AvatarUrl,
-        //        LinkFilmUrl = movieDTO.LinkFilmUrl,
-        //        DirectorID = movieDTO.DirectorID,
-        //        Status = 1
-        //    };
-
-        //    _context.Movies.Add(movie);
-        //    await _context.SaveChangesAsync();
-
-        //    return movieDTO;
-        //}
-
-        //public async Task UpdateAsync(Movie movie)
-        //{
-        //    _context.Movies.Update(movie);
-        //    await _context.SaveChangesAsync();
-        //}
-
-        public async Task DeleteAsync(int id)
-        {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<IEnumerable<RequestMovieDTO>> GetAllAsync()
-        {
-            var movies = await _context.Movies.ToListAsync();
-            return movies.Select(movie => new RequestMovieDTO
-            {
-                MovieId = movie.MovieId,
-                Title = movie.Title,
-                Description = movie.Description,
-                Rating = movie.Rating,
-                PosterUrl = movie.PosterUrl,
-                AvatarUrl = movie.AvatarUrl,
-                LinkFilmUrl = movie.LinkFilmUrl
-            }).ToList();
-        }
-
-        public async Task<HomeResponse> GetHomeMovies()
-        {
-            // Lấy danh sách poster của phim (3 poster)
-            var posters = await _context.Movies
-                .Select(x => new ResponseMovieDTO
-                {
-                    MovieId = x.MovieId,
-                    Title = x.Title,
-                    AvatarUrl = x.AvatarUrl,
-                    PosterUrl = x.PosterUrl
-                })
-                .Where(y => y.PosterUrl != null)
-                .Take(3)
-                .ToListAsync();
-
-            var hotMovies = await _context.Movies
-                .Select(x=> new ResponseMovieDTO
-                {
-                    MovieId = x.MovieId,
-                    Title = x.Title,
-                    AvatarUrl = x.AvatarUrl,
-                    PosterUrl = x.PosterUrl,
-                    IsHot = x.IsHot
-                })
-                .Where(y => y.IsHot != null && y.IsHot == true)
-                .Take(1)
-                .ToListAsync();
-                    
-            // Lấy danh sách phim hành động (thể loại có ID = 1)
-            var actionMovies = await _context.Movies
-                .Where(x => x.MovieCategories.Select(y => y.CategoriesID).Contains(1))
-                .Select(x => new ResponseMovieDTO
-                {
-                    MovieId = x.MovieId,
-                    Title = x.Title,
-                    Description = x.Description,
-                    Rating = x.Rating,
-                    PosterUrl = x.PosterUrl,
-                    AvatarUrl = x.AvatarUrl,
-                    LinkFilmUrl = x.LinkFilmUrl
-                })
-                .ToListAsync();
-
-
-            var home = new HomeResponse
-            {
-                PosterMovies = posters,
-                ActionMovies = actionMovies,
-                HotMovies = hotMovies
-            };
-
-            return home;
-        }
-
-        public async Task<RequestMovieDTO?> UpdateAsync(RequestMovieDTO movieDTO)
-        {
-            var movie = await _context.Movies.FindAsync(movieDTO.MovieId);
-            if (movie == null) return null;
-
-            movie.Title = movieDTO.Title;
-            movie.Description = movieDTO.Description;
-            movie.Rating = movieDTO.Rating;
-            movie.PosterUrl = movieDTO.PosterUrl;
-            movie.AvatarUrl = movieDTO.AvatarUrl;
-            movie.LinkFilmUrl = movieDTO.LinkFilmUrl;
-            movie.DirectorID = movieDTO.DirectorID;
-
-            await _context.SaveChangesAsync();
-            return movieDTO;
-        }
-
-        //  Xoá mềm
+        //Xoá mềm 
         public async Task SoftDeleteAsync(int id)
         {
             var movie = await _context.Movies.FindAsync(id);
@@ -209,20 +146,12 @@ namespace Movies.Repository
             }
         }
 
-        //  Lịch sử xoá
-        public async Task<IEnumerable<RequestMovieDTO>> GetDeletedMoviesAsync()
-        {
-            return await GetMoviesAsync(1, 100, "Title", "");
-        }
-
-        //  Xoá vĩnh viễn
-        public async Task DeleteDeletedMoviesAsync()
+        public async Task DeleteAsync(int id)
         {
             var movies = _context.Movies.Where(m => m.Status == 0);
             _context.Movies.RemoveRange(movies);
             await _context.SaveChangesAsync();
+
         }
-
-
     }
 }

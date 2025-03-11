@@ -6,12 +6,12 @@ namespace Movies.Repository
 {
     public interface IMovieRepository
     {
-        Task<IEnumerable<RequestMovieDTO>> GetAllAsync();
-        Task<RequestMovieDTO> GetByIdAsync(int id);
-        //Task AddAsync(RequestMovieDTO movie);
-        //Task UpdateAsync(RequestMovieDTO movie);
+        Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO);
+        Task<RequestMovieDTO?> UpdateAsync(RequestMovieDTO movieDTO);
+        Task<RequestMovieDTO?> GetByIdAsync(int id);
+        Task SoftDeleteAsync(int id);
         Task DeleteAsync(int id);
-        Task<HomeResponse> GetHomeMovies();
+        Task<IEnumerable<RequestMovieDTO>> GetMoviesAsync(int pageNumber, int pageSize, string sortBy, string search, int? categoryID);
 
     }
 }
