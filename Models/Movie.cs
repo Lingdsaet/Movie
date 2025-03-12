@@ -43,8 +43,7 @@ public partial class Movie
     public virtual Director? Director { get; set; }
 
     public int? Status { get; set; }
-    //public required ICollection<MovieActor> MovieActors { get; set; }
-    //public required ICollection<MovieCategory> MovieCategories { get; set; }
+
 
     [ForeignKey("MovieID")]
     [InverseProperty("Movies")]

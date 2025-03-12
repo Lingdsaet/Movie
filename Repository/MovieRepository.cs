@@ -136,22 +136,57 @@ namespace Movies.Repository
             }).ToList();
         }
         //Xoá mềm 
-        public async Task SoftDeleteAsync(int id)
+        public async Task<RequestMovieDTO?> SoftDeleteAsync (int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movies.FindAsync (id);
             if (movie != null)
             {
                 movie.Status = 0;
                 await _context.SaveChangesAsync();
             }
+            return null;
+        }
+        //lich su xoa
+        public async Task<IEnumerable<RequestMovieDTO>> GetDeleteAsync()
+        {
+            var deletedMovies = await _context.Movies
+                .Include(m => m.Director)
+                .Include(m => m.MovieActor).ThenInclude(ma => ma.Actor)
+                .Include(m => m.MovieCategory).ThenInclude(mc => mc.Category)
+                .Where(m => m.Status == 0)
+                .Select(m => new RequestMovieDTO
+                {
+                    MovieId = m.MovieId,
+                    Title = m.Title,
+                    Description = m.Description,
+                    Rating = m.Rating,
+                    PosterUrl = m.PosterUrl,
+                    AvatarUrl = m.AvatarUrl,
+                    LinkFilmUrl = m.LinkFilmUrl,
+                    DirectorID = m.DirectorID,
+                    DirectorName = m.Director != null ? m.Director.NameDir : null,
+                    Actors = m.MovieActor.Select(ma => new RequestActorDTO
+                    {
+                        ActorsID = ma.Actor.ActorsID,
+                        NameAct = ma.Actor.NameAct
+                    }).ToList(),
+                    Categories = m.MovieCategory.Select(mc => new RequestCategoryDTO
+                    {
+                        CategoriesID = mc.Category.CategoriesID,
+                        CategoryName = mc.Category.CategoryName
+                    }).ToList()
+                }).ToListAsync();
+
+            return deletedMovies;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeletedMoviesAsync(int id)
         {
             var movies = _context.Movies.Where(m => m.Status == 0);
             _context.Movies.RemoveRange(movies);
             await _context.SaveChangesAsync();
 
         }
+
     }
 }

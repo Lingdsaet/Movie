@@ -25,8 +25,8 @@ public partial class Actor
     [InverseProperty("Actors")]
     public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();
 
-    //[ForeignKey("ActorsID")]
-    //[InverseProperty("Actors")]
-    //public virtual ICollection<Series> Series { get; set; } = new List<Series>();
+    [ForeignKey("ActorsID")]
+    [InverseProperty("Actors")]
+    public virtual ICollection<Series> Series { get; set; } = new List<Series>();
     public virtual ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
 }

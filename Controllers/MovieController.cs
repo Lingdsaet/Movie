@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Movies.Models;
 using Movies.Repository;
 using Movies.RequestDTO;
+using Nest;
 
 namespace Movies.Controllers
 {
@@ -15,6 +16,8 @@ namespace Movies.Controllers
         {
             _movieRepository = movieRepository;
         }
+
+        //  Lấy danh sách phim + phân trang+ lọc + sắp xếp
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetMovies(
             int pageNumber = 1,
@@ -28,6 +31,18 @@ namespace Movies.Controllers
             return Ok(movies);
         }
 
+
+        //  Lấy thông tin phim theo ID
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RequestMovieDTO>> GetMovie(int id)
+        {
+            var movie = await _movieRepository.GetByIdAsync(id);
+            if (movie == null)
+            {
+                return NotFound("Movie not found");
+            }
+            return Ok(movie);
+        }
         //  Thêm phim
         [HttpPost]
         public async Task<ActionResult<RequestMovieDTO>> AddMovie([FromBody] RequestMovieDTO request)
@@ -60,7 +75,7 @@ namespace Movies.Controllers
         }
 
         // Xoá mềm (chuyển status từ 1 -> 0)
-        [HttpDelete("{id}")]
+        [HttpDelete("de/{id}")]
         public async Task<IActionResult> SoftDeleteMovie(int id)
         {
             var movie = await _movieRepository.GetByIdAsync(id);
@@ -73,20 +88,26 @@ namespace Movies.Controllers
             return NoContent();
         }
 
-        //// Lịch sử xoá (phim có Status = 0)
-        //[HttpGet("deleted")]
-        //public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetDeletedMovies()
-        //{
-        //    var movies = await _movieRepository.SoftDeleteAsync();
-        //    return Ok(movies);
-        //}
+        //Danh sách xoá
+        [HttpGet("getDeleted")]
+        public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetDeletedMovies()
+        {
+            var deletedMovies = await _movieRepository.GetDeleteAsync();
 
-        ////  Xoá vĩnh viễn các phim có Status = 0
-        //[HttpDelete("deleted")]
-        //public async Task<IActionResult> DeleteDeletedMovies()
-        //{
-        //    await _movieRepository.DeleteDeletedMoviesAsync();
-        //    return NoContent();
-        //}
+            if (deletedMovies == null || !deletedMovies.Any())
+            {
+                return NotFound(new { message = "No deleted movies found!" });
+            }
+
+            return Ok(deletedMovies);
+        }
+
+        //  Xoá vĩnh viễn các phim có Status = 0
+        [HttpDelete("deleted")]
+        public async Task<IActionResult> DeletedMovies(int id)
+        {
+            await _movieRepository.DeletedMoviesAsync(id);
+            return NoContent();
+        }
     }
 }
