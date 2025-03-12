@@ -1,0 +1,112 @@
+GET: api/home
+Request: UserName: string
+Response:
+homeMovie
+{
+    poster: [
+        movieId: int,
+        avatarUrl: string,
+        movieName: string
+    ],
+    hotMovies: [
+        movieId: int,
+        avatarUrl: string,
+        movieName: string
+    ],
+    newMovies: [
+        movieId: int,
+        avatarUrl: string,
+        movieName: string
+    ],    
+    actionMovies: [
+        movieId: int,
+        avatarUrl: string,
+        movieName: string
+    ],
+}
+
+api/home/series
+seriesMovies: {
+        movieId: int,
+        avatarUrl: string,
+        movieName: string
+},
+
+
+GET: api/actors/{Id}
+Request: actorId: int
+Response: 
+{
+    actor: {
+        actorId: int,
+        actorName: string,
+        actorNational: string
+    },
+    movies: [
+        {
+            movieId: int,
+            avatarUrl: string,
+            movieName: string
+        }
+    ],
+    
+}
+
+GET: api/directors/{Id}
+Request: directorId: int
+Response:
+{
+    director: {
+        directorId: int,
+        directorName: string,
+        directorNational: string
+    },
+    movies: [
+        {
+            movieId: int,
+            avatarUrl: string,
+            movieName: string
+        }
+    ],
+    
+}
+
+GET: api/detailMovie/{Id}
+Request: MoviedId: int
+Response:
+{
+    detailMovie: {
+        nameMovie: string,
+        movieLink: string,
+        Year: datatime,
+        National: string,
+        category: string,
+        description: string,
+        espisode: int,
+        totalespisode: int,
+        actor: [
+            {
+                actiorId: int,
+                actorName: string
+            }
+        ],
+        director: string
+    }
+}
+
+POST: api/SignUp
+{
+    User: {
+        UserName: string,
+        Password: string,
+        Email: string
+    }
+}
+
+GET: api/Login
+{
+    User: {
+        UserName: string,
+        Password: string
+    }
+}
