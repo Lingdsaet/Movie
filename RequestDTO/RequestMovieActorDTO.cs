@@ -1,4 +1,4 @@
-﻿namespace Movies.RequestDTO
+﻿namespace Movie.RequestDTO
 {
     public class RequestMovieActorDTO
     {

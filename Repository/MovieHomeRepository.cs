@@ -1,9 +1,20 @@
-﻿using Movies.ResponseDTO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Movie.Models;
+using Movie.ResponseDTO;
 
-namespace Movies.Repository
+namespace Movie.Repository
 {
-    public class MovieHomeRepository
+    public class MovieHomeRepository : IMovieHome
     {
+        private readonly movieDB _context;
+        public MovieHomeRepository(movieDB context)
+        {
+            _context = context;
+        }
         // home
         public async Task<IEnumerable<string>> GetPostersAsync()
         {
@@ -11,12 +22,12 @@ namespace Movies.Repository
                 .Where(m => m.Status == 1 && m.PosterUrl != null)
                 .OrderByDescending(m => m.YearReleased)
                 .Take(3)
-                .Select(m => m.PosterUrl) // Chỉ lấy URL của poster
+                .Select(m => m.PosterUrl)
                 .ToListAsync();
 
             return posters;
         }
-        public async Task<IEnumerable<ResponseMovieDTO>> GetNewMoviesAsync()
+        public async Task<IEnumerable<ResponseMovieDTO>> GetNewMovieAsync()
         {
             var query = _context.Movies
                 .Where(m => m.Status == 1)
@@ -31,7 +42,7 @@ namespace Movies.Repository
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<ResponseMovieDTO>> GetHotMoviesAsync()
+        public async Task<IEnumerable<ResponseMovieDTO>> GetHotMovieAsync()
         {
             var query = _context.Movies
                 .Where(m => m.Status == 1 && m.IsHot == true)
@@ -46,7 +57,7 @@ namespace Movies.Repository
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<ResponseMovieDTO>> GetSeriesMoviesAsync()
+        public async Task<IEnumerable<ResponseMovieDTO>> GetSeriesMovieAsync()
         {
             var query = _context.Series
                 .Where(s => s.Status == 1)
@@ -57,19 +68,17 @@ namespace Movies.Repository
             {
                 MovieId = series.SeriesId,
                 Title = series.Title,
-                Description = series.Description,
                 PosterUrl = series.PosterUrl,
                 AvatarUrl = series.AvatarUrl,
-                LinkFilmUrl = series.LinkFilmUrl
             }).ToListAsync();
             throw new NotImplementedException();
         }
 
 
-        public async Task<IEnumerable<ResponseMovieDTO>> GetActionMoviesAsync()
+        public async Task<IEnumerable<ResponseMovieDTO>> GetActionMovieAsync()
         {
             var query = _context.Movies
-                .Where(m => m.Status == 1 && m.MovieCategory.Any(mc => mc.Category.CategoryName == "Hành Động"))
+                .Where(m => m.Status == 1 && m.MovieCategories.Any(mc => mc.Categories.CategoryName == "Hành Động"))
                 .OrderByDescending(m => m.YearReleased)
                 .Take(10);
 
@@ -81,3 +90,4 @@ namespace Movies.Repository
             }).ToListAsync();
         }
     }
+}

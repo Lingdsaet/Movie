@@ -1,6 +1,6 @@
 ﻿
 
-namespace Movies.RequestDTO;
+namespace Movie.RequestDTO;
 
 public partial class RequestCategoryDTO
 {

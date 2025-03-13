@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Movies.Models;
-using Movies.RequestDTO;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Movie.Models;
+using Movie.RequestDTO;
 
-namespace Movies.ResponseDTO
+namespace Movie.ResponseDTO
 {
     public class ResponseMovieDTO
     {

@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Movies.Models;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Movie.Models;
 
-namespace Movies.Repository
+namespace Movie.Repository
 {
     public class MovieActorRepository : IMovieActorRepository<MovieActor>
     {
@@ -22,7 +24,7 @@ namespace Movies.Repository
         }
         public async Task DeleteByMovieIdAsync(int movieId)
         {
-            var actors = _context.MovieActors.Where(mc => mc.MovieID == movieId);
+            var actors = _context.MovieActors.Where(mc => mc.MovieId == movieId);
             _context.MovieActors.RemoveRange(actors);
             await _context.SaveChangesAsync();
         }

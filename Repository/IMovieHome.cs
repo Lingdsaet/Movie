@@ -1,14 +1,16 @@
-﻿using Movies.ResponseDTO;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Movie.ResponseDTO;
 
-namespace Movies.Repository
+namespace Movie.Repository
 {
     public interface IMovieHome
     {
         //Home
         Task<IEnumerable<string>> GetPostersAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetNewMoviesAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetHotMoviesAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetSeriesMoviesAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetActionMoviesAsync();
+        Task<IEnumerable<ResponseMovieDTO>> GetNewMovieAsync();
+        Task<IEnumerable<ResponseMovieDTO>> GetHotMovieAsync();
+        Task<IEnumerable<ResponseMovieDTO>> GetSeriesMovieAsync();
+        Task<IEnumerable<ResponseMovieDTO>> GetActionMovieAsync();
     }
 }

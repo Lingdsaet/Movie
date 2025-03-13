@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Movies.Models;
-using Movies.Repository;
-using Movies.RequestDTO;
-using Movies.ResponseDTO;
 
-namespace Movies.Controllers
+using Movie.Repository;
+using Movie.RequestDTO;
+using Movie.ResponseDTO;
+
+namespace Movie.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,39 +21,39 @@ namespace Movies.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPosterAsync()
         {
-            var movies = await _movieRepository.GetPostersAsync();
-            return Ok(movies);
+            var Movie = await _movieRepository.GetPostersAsync();
+            return Ok(Movie);
         }
         // Lấy danh sách phim mới
         [HttpGet("new")]
-        public async Task<IActionResult> GetNewMovies()
+        public async Task<IActionResult> GetNewMovie()
         {
-            var movies = await _movieRepository.GetNewMoviesAsync();
-            return Ok(movies);
+            var Movie = await _movieRepository.GetNewMovieAsync();
+            return Ok(Movie);
         }
 
         // Lấy danh sách phim hot
         [HttpGet("hot")]
-        public async Task<IActionResult> GetHotMovies()
+        public async Task<IActionResult> GetHotMovie()
         {
-            var movies = await _movieRepository.GetHotMoviesAsync();
-            return Ok(movies);
+            var Movie = await _movieRepository.GetHotMovieAsync();
+            return Ok(Movie);
         }
 
         // Lấy danh sách phim bộ
         [HttpGet("series")]
-        public async Task<IActionResult> GetSeriesMovies()
+        public async Task<IActionResult> GetSeriesMovie()
         {
-            var movies = await _movieRepository.GetSeriesMoviesAsync();
-            return Ok(movies);
+            var Movie = await _movieRepository.GetSeriesMovieAsync();
+            return Ok(Movie);
         }
 
         // Lấy danh sách phim hành động
         [HttpGet("action")]
-        public async Task<IActionResult> GetActionMovies()
+        public async Task<IActionResult> GetActionMovie()
         {
-            var movies = await _movieRepository.GetActionMoviesAsync();
-            return Ok(movies);
+            var Movie = await _movieRepository.GetActionMovieAsync();
+            return Ok(Movie);
         }
     }
 }

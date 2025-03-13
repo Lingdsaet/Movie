@@ -1,4 +1,6 @@
-﻿namespace Movies.Repository
+﻿using System.Threading.Tasks;
+
+namespace Movie.Repository
 {
     public interface IMovieActorRepository<MovieActor>
     {

@@ -1,7 +1,9 @@
 ﻿
-using Movies.Models;
+using System.Linq;
+using System.Threading.Tasks;
+using Movie.Models;
 
-namespace Movies.Repository
+namespace Movie.Repository
 {
     public class MovieCategoryRepository : IMovieCategoryRepository<MovieCategory>
     {
@@ -17,7 +19,7 @@ namespace Movies.Repository
         }
         public async Task DeleteByMovieIdAsync(int movieId)
         {
-            var categories = _context.MovieCategories.Where(mc => mc.MovieID == movieId);
+            var categories = _context.MovieCategories.Where(mc => mc.MovieId == movieId);
             _context.MovieCategories.RemoveRange(categories);
             await _context.SaveChangesAsync();
         }

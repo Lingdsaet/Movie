@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Movies.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Movie.Models;
 
-namespace Movies.Repository
+namespace Movie.Repository
 {
     public class SeriesRepository
     {
