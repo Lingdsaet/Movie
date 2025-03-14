@@ -19,6 +19,9 @@ builder.Services.AddScoped<IMovieCategoryRepository<MovieCategory>, MovieCategor
 builder.Services.AddScoped<IMovieActorRepository<MovieActor>, MovieActorRepository>();
 builder.Services.AddScoped<IMovieHome, MovieHomeRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
+builder.Services.AddScoped<IDirectorsRepository, DirectorRepository>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

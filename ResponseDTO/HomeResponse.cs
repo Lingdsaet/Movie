@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using Movie.RequestDTO;
 
 namespace Movie.ResponseDTO
 {
     public class HomeResponse
     {
-        public IEnumerable<ResponseMovieDTO> PosterMovie { get; set; }
-        public IEnumerable<ResponseMovieDTO> HotMovie { get; set; }
-        public IEnumerable<ResponseMovieDTO> NewMovie { get; set; }
-        public IEnumerable<ResponseMovieDTO> SeriesMovie { get; set; }
-        public IEnumerable<ResponseMovieDTO> ActionMovie { get; set; }
+        public IEnumerable<RequestDirectorDTO> PosterMovie { get; set; }
+        public IEnumerable<RequestDirectorDTO> HotMovie { get; set; }
+        public IEnumerable<RequestDirectorDTO> NewMovie { get; set; }
+        public IEnumerable<RequestDirectorDTO> SeriesMovie { get; set; }
+        public IEnumerable<RequestDirectorDTO> ActionMovie { get; set; }
     }
 }

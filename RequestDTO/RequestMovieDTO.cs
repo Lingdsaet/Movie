@@ -14,7 +14,7 @@ public partial class RequestMovieDTO
 
     public string? Description { get; set; }
 
-    public int? DirectorID { get; set; }
+    public int? DirectorId { get; set; }
 
     public decimal? Rating { get; set; }
     public string? PosterUrl { get; set; }

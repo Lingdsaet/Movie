@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Movie.Models;
+using Movie.RequestDTO;
 using Movie.ResponseDTO;
 
 namespace Movie.Repository
@@ -27,14 +28,14 @@ namespace Movie.Repository
 
             return posters;
         }
-        public async Task<IEnumerable<ResponseMovieDTO>> GetNewMovieAsync()
+        public async Task<IEnumerable<RequestMovieDTO>> GetNewMovieAsync()
         {
             var query = _context.Movies
                 .Where(m => m.Status == 1)
                 .OrderByDescending(m => m.YearReleased)
                 .Take(10);
 
-            return await query.Select(movie => new ResponseMovieDTO
+            return await query.Select(movie => new RequestMovieDTO
             {
                 MovieId = movie.MovieId,
                 Title = movie.Title,
@@ -42,14 +43,14 @@ namespace Movie.Repository
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<ResponseMovieDTO>> GetHotMovieAsync()
+        public async Task<IEnumerable<RequestMovieDTO>> GetHotMovieAsync()
         {
             var query = _context.Movies
                 .Where(m => m.Status == 1 && m.IsHot == true)
                 .OrderByDescending(m => m.Rating)
                 .Take(10);
 
-            return await query.Select(movie => new ResponseMovieDTO
+            return await query.Select(movie => new RequestMovieDTO
             {
                 MovieId = movie.MovieId,
                 Title = movie.Title,
@@ -57,14 +58,14 @@ namespace Movie.Repository
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<ResponseMovieDTO>> GetSeriesMovieAsync()
+        public async Task<IEnumerable<RequestMovieDTO>> GetSeriesMovieAsync()
         {
             var query = _context.Series
                 .Where(s => s.Status == 1)
                 .OrderByDescending(s => s.YearReleased)
                 .Take(10);
 
-            return await query.Select(series => new ResponseMovieDTO
+            return await query.Select(series => new RequestMovieDTO
             {
                 MovieId = series.SeriesId,
                 Title = series.Title,
@@ -75,14 +76,14 @@ namespace Movie.Repository
         }
 
 
-        public async Task<IEnumerable<ResponseMovieDTO>> GetActionMovieAsync()
+        public async Task<IEnumerable<RequestMovieDTO>> GetActionMovieAsync()
         {
             var query = _context.Movies
                 .Where(m => m.Status == 1 && m.MovieCategories.Any(mc => mc.Categories.CategoryName == "Hành Động"))
                 .OrderByDescending(m => m.YearReleased)
                 .Take(10);
 
-            return await query.Select(movie => new ResponseMovieDTO
+            return await query.Select(movie => new RequestMovieDTO
             {
                 MovieId = movie.MovieId,
                 Title = movie.Title,

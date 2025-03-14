@@ -24,7 +24,7 @@ namespace Movie.Repository
                 PosterUrl = movieDTO.PosterUrl,
                 AvatarUrl = movieDTO.AvatarUrl,
                 LinkFilmUrl = movieDTO.LinkFilmUrl,
-                DirectorId = movieDTO.DirectorID,
+                DirectorId = movieDTO.DirectorId,
                 IsHot = movieDTO.IsHot,
                 YearReleased = movieDTO.YearReleased,
                 Status = 1
@@ -50,7 +50,7 @@ namespace Movie.Repository
                 PosterUrl = movie.PosterUrl,
                 AvatarUrl = movie.AvatarUrl,
                 LinkFilmUrl = movie.LinkFilmUrl,
-                DirectorID = movie.DirectorId,
+                DirectorId = movie.DirectorId,
                 DirectorName = movie.Director?.NameDir,
                 IsHot = movie.IsHot,
                 YearReleased = movie.YearReleased
@@ -70,7 +70,7 @@ namespace Movie.Repository
             movie.PosterUrl = movieDTO.PosterUrl;
             movie.AvatarUrl = movieDTO.AvatarUrl;
             movie.LinkFilmUrl = movieDTO.LinkFilmUrl;
-            movie.DirectorId = movieDTO.DirectorID;
+            movie.DirectorId = movieDTO.DirectorId;
             movie.IsHot = movieDTO.IsHot;
             movie.YearReleased = movie.YearReleased;
 
@@ -119,16 +119,16 @@ namespace Movie.Repository
                 PosterUrl = m.PosterUrl,
                 AvatarUrl = m.AvatarUrl,
                 LinkFilmUrl = m.LinkFilmUrl,
-                DirectorID = m.DirectorId,
+                DirectorId = m.DirectorId,
                 DirectorName = m.Director?.NameDir,
                 Actors = m.MovieActors.Select(ma => new RequestActorDTO
                  {
-                     ActorsID = ma.Actors.ActorsId,
+                     ActorsId = ma.Actors.ActorsId,
                     NameAct = ma.Actors.NameAct
                  }).ToList(),
                 Categories = m.MovieCategories.Select(mc => new RequestCategoryDTO
                 {
-                    CategoriesID = mc.Categories.CategoriesId,
+                    CategoriesId = mc.Categories.CategoriesId,
                     CategoryName = mc.Categories.CategoryName
                 }).ToList()
             }).ToList();
@@ -161,16 +161,16 @@ namespace Movie.Repository
                     PosterUrl = m.PosterUrl,
                     AvatarUrl = m.AvatarUrl,
                     LinkFilmUrl = m.LinkFilmUrl,
-                    DirectorID = m.DirectorId,
+                    DirectorId  = m.DirectorId,
                     DirectorName = m.Director != null ? m.Director.NameDir : null,
                     Actors = m.MovieActors.Select(ma => new RequestActorDTO
                     {
-                        ActorsID = ma.Actors.ActorsId,
+                        ActorsId = ma.Actors.ActorsId,
                         NameAct = ma.Actors.NameAct
                     }).ToList(),
                     Categories = m.MovieCategories.Select(mc => new RequestCategoryDTO
                     {
-                        CategoriesID = mc.Categories.CategoriesId,
+                        CategoriesId = mc.Categories.CategoriesId,
                         CategoryName = mc.Categories.CategoryName
                     }).ToList()
                 }).ToListAsync();

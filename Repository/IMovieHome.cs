@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Movie.RequestDTO;
 using Movie.ResponseDTO;
 
 namespace Movie.Repository
@@ -8,9 +9,9 @@ namespace Movie.Repository
     {
         //Home
         Task<IEnumerable<string>> GetPostersAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetNewMovieAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetHotMovieAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetSeriesMovieAsync();
-        Task<IEnumerable<ResponseMovieDTO>> GetActionMovieAsync();
+        Task<IEnumerable<RequestMovieDTO>> GetNewMovieAsync();
+        Task<IEnumerable<RequestMovieDTO>> GetHotMovieAsync();
+        Task<IEnumerable<RequestMovieDTO>> GetSeriesMovieAsync();
+        Task<IEnumerable<RequestMovieDTO>> GetActionMovieAsync();
     }
 }

@@ -7,6 +7,6 @@ namespace Movie.Repository
 {
     public interface IActorRepository    
     {
-        Task<RequestActorDTO> GetActorByIdAsync(int id);
+        Task<ActorDetailDTO?> GetActorByIdAsync(int id);
     }
 }
