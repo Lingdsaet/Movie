@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Movie.Models;
 using Movie.RequestDTO;
+using Movie.ResponseDTO;
 
 namespace Movie.Repository
 {
-    public class SeriesRepository : ISeries
+    public class SeriesRepository : ISeriesRepository
     {
         private readonly movieDB _context;
         public SeriesRepository(movieDB context)
@@ -41,37 +43,62 @@ namespace Movie.Repository
 
         public async Task<RequestSeriesDTO> GetSeriesByIdAsync(int id)
         {
-            var movie = await _context.Series
-                .Include(m => m.Director)
-                .Include(m => m.SeriesActors)
-                    .ThenInclude(ma => ma.Actors)
-                .Include(m => m.SeriesCategories)
-                    .ThenInclude(mc => mc.Categories)
-                .FirstOrDefaultAsync(m => m.SeriesId == id);
 
-            if (movie == null) return null!;
+            var series = await _context.Series
+            .Include(s => s.SeriesActors)
+                .ThenInclude(sa => sa.Actors)
+            .Include(s => s.SeriesCategories)
+                .ThenInclude(sc => sc.Categories)
+            .Include(s => s.Director)
+            .FirstOrDefaultAsync(s => s.SeriesId == id);
 
-            var movieDTO = new RequestSeriesDTO
+            if (series == null) return null;
+
+            var seriesDTO = new RequestSeriesDTO
             {
-                Title = movie.Title,
-                LinkFilmUrl = movie.LinkFilmUrl,
-                YearReleased = movie.YearReleased,
-                Nation = movie.Nation,
-                Categories = movie.MovieCategories
-                    .Select(mc => new RequestCategoryDTO
+                Title = series.Title,
+                LinkFilmUrl = series.LinkFilmUrl ?? string.Empty,
+                YearReleased = series.YearReleased,
+                Nation = series.Nation ?? string.Empty,
+                Categories = series.SeriesCategories
+                    .Select(sc => new RequestCategoryDTO
                     {
-                        CategoryName = mc.Categories.CategoryName
+                        CategoryName = sc.Categories.CategoryName
                     }).ToList(),
-                Description = movie.Description,
-                Actors = movie.MovieActors.Select(ma => new RequestActorDTO
+                Description = series.Description ?? string.Empty,
+                Episode = await _context.Episodes
+                    .Where(e => e.SeriesId == series.SeriesId)
+                    .Select(e => new RequestEpisodeDTO
+                    {
+                        EpisodeNumber = e.EpisodeNumber,
+                        Title = e.Title ?? string.Empty,
+                        LinkFilmUrl = e.LinkFilmUrl ?? string.Empty
+                    }).ToListAsync(),
+                TotalEpisode = series.Status ?? 0,
+                Actors = series.SeriesActors.Select(sa => new RequestActorDTO
                 {
-                    ActorsId = ma.ActorsId,
-                    NameAct = ma.Actors.NameAct
+                    ActorsId = sa.ActorsId,
+                    NameAct = sa.Actors.NameAct
                 }).ToList(),
-                Director = movie.Director!.NameDir
+                Director = series.Director?.NameDir ?? string.Empty
             };
 
-            return movieDTO;
+            return seriesDTO;
         }
+
+        //// Lấy danh sách các tập phim theo Series
+        //public async Task<List<RequestEpisodeDTO>> GetEpisodesBySeriesIdAsync(int seriesId)
+        //{
+        //    var episodes = await _context.Episodes
+        //        .Where(e => e.SeriesId == seriesId)
+        //        .Select(e => new RequestEpisodeDTO
+        //        {
+        //            EpisodeNumber = e.EpisodeNumber,
+        //            Title = e.Title ?? "",
+        //            LinkFilmUrl = e.LinkFilmUrl
+        //        }).ToListAsync();
+
+        //    return episodes;
+        //}
     }
 }

@@ -55,6 +55,7 @@ namespace Movie.Repository
                 MovieId = movie.MovieId,
                 Title = movie.Title,
                 AvatarUrl = movie.AvatarUrl,
+                IsHot = true
             }).ToListAsync();
         }
 
