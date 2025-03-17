@@ -23,7 +23,7 @@ namespace Movie.Repository
                 .Where(m => m.Status == 1 && m.PosterUrl != null)
                 .OrderByDescending(m => m.YearReleased)
                 .Take(3)
-                .Select(m => m.PosterUrl)
+                .Select(m => m.PosterUrl!)
                 .ToListAsync();
 
             return posters;

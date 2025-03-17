@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Movies.Models;
+namespace Movie.Models;
 
 [Table("Payment")]
 public partial class Payment
 {
     [Key]
     [Column("SubPaymentID")]
-    public int SubPaymentID { get; set; }
+    public int SubPaymentId { get; set; }
 
     [Column("UserID")]
     public int? UserId { get; set; }
@@ -22,9 +22,9 @@ public partial class Payment
     [Column(TypeName = "decimal(10, 2)")]
     public decimal? Price { get; set; }
 
-    public DateOnly? StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
 
-    public DateOnly? EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     public int? Status { get; set; }
 

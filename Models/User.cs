@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace Movies.Models;
+namespace Movie.Models;
 
 [Index("Username", Name = "UQ__Users__536C85E4C82ADC90", IsUnique = true)]
 [Index("Email", Name = "UQ__Users__A9D105346A615AC5", IsUnique = true)]

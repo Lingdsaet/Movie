@@ -6,25 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Movie.Models;
 
-[PrimaryKey("MovieId", "ActorsId")]
-[Table("MovieActor")]
-public partial class MovieActor
+[PrimaryKey("SeriesId", "ActorsId")]
+[Table("SeriesActor")]
+public partial class SeriesActor
 {
-    public int MovieActorId { get; set; }
-
     [Key]
-    [Column("MovieID")]
-    public int MovieId { get; set; }
+    [Column("SeriesID")]
+    public int SeriesId { get; set; }
 
     [Key]
     [Column("ActorsID")]
     public int ActorsId { get; set; }
 
+    [Column("SeriesActorID")]
+    public int SeriesActorId { get; set; }
+
     [ForeignKey("ActorsId")]
-    [InverseProperty("MovieActors")]
+    [InverseProperty("SeriesActors")]
     public virtual Actor Actors { get; set; } = null!;
 
-    [ForeignKey("MovieId")]
-    [InverseProperty("MovieActors")]
-    public virtual Movies Movie { get; set; } = null!;
+    [ForeignKey("SeriesId")]
+    [InverseProperty("SeriesActors")]
+    public virtual Series Series { get; set; } = null!;
 }

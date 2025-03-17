@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace Movies.Models;
+namespace Movie.Models;
 
 public partial class Episode
 {
     [Key]
     [Column("EpisodeID")]
-    public int EpisodeID { get; set; }
+    public int EpisodeId { get; set; }
 
     [Column("SeriesID")]
-    public int? SeriesID { get; set; }
+    public int? SeriesId { get; set; }
 
     public int EpisodeNumber { get; set; }
 

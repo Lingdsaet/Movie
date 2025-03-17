@@ -1,14 +1,16 @@
-﻿using Movies.Models;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace Movies.Models;
+namespace Movie.Models;
 
 public partial class Actor
 {
     [Key]
     [Column("ActorsID")]
-    public int ActorsID { get; set; }
+    public int ActorsId { get; set; }
 
     [StringLength(225)]
     public string NameAct { get; set; } = null!;
@@ -21,12 +23,12 @@ public partial class Actor
     [StringLength(255)]
     public string? Professional { get; set; }
 
-    [ForeignKey("ActorsID")]
-    [InverseProperty("Actors")]
-    public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();
+    [StringLength(255)]
+    public string? AvatarUrl { get; set; }
 
-    [ForeignKey("ActorsID")]
     [InverseProperty("Actors")]
-    public virtual ICollection<Series> Series { get; set; } = new List<Series>();
-    public virtual ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
+    public virtual ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();
+
+    [InverseProperty("Actors")]
+    public virtual ICollection<SeriesActor> SeriesActors { get; set; } = new List<SeriesActor>();
 }

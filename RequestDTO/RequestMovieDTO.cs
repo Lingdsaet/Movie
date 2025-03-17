@@ -15,6 +15,7 @@ public partial class RequestMovieDTO
     public string? Description { get; set; }
 
     public int? DirectorId { get; set; }
+    public string? Nation { get; set; }
 
     public decimal? Rating { get; set; }
     public string? PosterUrl { get; set; }
@@ -32,5 +33,10 @@ public partial class RequestMovieDTO
     public int? Status { get; set; }
     public List<RequestCategoryDTO> Categories { get; set; } = new List<RequestCategoryDTO>();
     public List<RequestActorDTO> Actors {  get; set; } = new List<RequestActorDTO> { };
-    public string? DirectorName { get; internal set; }
+}
+public class ActorDTO
+{
+    public int ActorId { get; set; }
+    public string NameAct { get; set; }
+
 }
