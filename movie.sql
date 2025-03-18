@@ -1,7 +1,7 @@
 ﻿-- bảng người dùng
 create table Users (
 UserID int IDENTITY(1,1) PRIMARY KEY,
-Username nvarchar (50) not null unique,
+UserName nvarchar (50) not null unique,
 Email nvarchar (100)  not null unique,
 Password nvarchar (255) not null,
 Createdat datetime default getdate(),
@@ -41,6 +41,8 @@ Title nvarchar (255) not null,
 Description nvarchar (max),
 DirectorID int,
 Rating Decimal (3,1),
+YearReleased datime,
+Nation nvarchar(50)
 IsHot bit,
 YearReleased Datetime,
 PosterURL nvarchar (255), 
@@ -79,7 +81,7 @@ Status int default 1 not null ,
 
 -- gói đăng ký
 create table Payment(
-SubpaymentID int identity(1,1) Primary key,
+SubPaymentID int identity(1,1) Primary key,
 UserID int,
 PlanName nvarchar (50),
 Price decimal (10,2),
@@ -92,6 +94,7 @@ Status int default 1 not null,
 
 --Bảng liên kết n-n phim- thể loại
 create table MovieCategories(
+MovieCategoryID int,
 MovieID int,
 CategoriesID int,
 Primary key(MovieID, CategoriesID),
@@ -100,6 +103,7 @@ Foreign key (CategoriesID) references  Categories (CategoriesID) on delete casca
 );
 
 create table SeriesCategories(
+SeriesActorID int,
 SeriesID int,
 CategoriesID int,
 Primary key(SeriesID, CategoriesID),
@@ -109,6 +113,7 @@ Foreign key (CategoriesID) references  Categories (CategoriesID) on delete casca
 
 --Bảng Liên kết n-n phim-diễn viên
 create table MovieActor(
+MovieActorId int,
 MovieID int,
 ActorsID int,
 Primary key(MovieID,ActorsID),
@@ -117,6 +122,7 @@ Foreign key (ActorsID) references  Actors(ActorsID) on delete cascade,
 );
 
 create table SeriesActor(
+SeriesCategoriesID int,
 SeriesID int,
 ActorsID int,
 Primary key(SeriesID,ActorsID),
