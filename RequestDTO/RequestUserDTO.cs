@@ -8,7 +8,7 @@ public partial class RequestUserDTO
     public int UserId { get; set; }
 
 
-    public string Username { get; set; } = null!;
+    public string UserName { get; set; } = null!;
 
 
     public string Email { get; set; } = null!;
@@ -21,4 +21,9 @@ public partial class RequestUserDTO
 
 
     public virtual ICollection<RequestPaymentDTO> Payments { get; set; } = new List<RequestPaymentDTO>();
+}
+public class LoginDTO
+{
+    public string UserName { get; set; }
+    public string Password { get; set; }
 }
