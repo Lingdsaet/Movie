@@ -41,7 +41,6 @@ Title nvarchar (255) not null,
 Description nvarchar (max),
 DirectorID int,
 Rating Decimal (3,1),
-YearReleased datime,
 Nation nvarchar(50)
 IsHot bit,
 YearReleased Datetime,
