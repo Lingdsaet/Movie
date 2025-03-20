@@ -33,7 +33,7 @@ namespace Movie.Controllers
 
 
         //  Lấy thông tin phim theo ID
-        [HttpGet("{id}")]
+        [HttpGet("Seach/{id}")]
         public async Task<ActionResult<RequestMovieDTO>> GetMovie(int id)
         {
             var movie = await _movieRepository.GetByIdAsync(id);
@@ -43,17 +43,14 @@ namespace Movie.Controllers
             }
             return Ok(movie);
         }
-        //  Thêm phim
-        [HttpPost]
-        public async Task<ActionResult<RequestMovieDTO>> AddMovie([FromBody] RequestMovieDTO request)
-        {
-            if (request == null)
-            {
-                return BadRequest("Invalid movie data.");
-            }
 
-            var movie = await _movieRepository.AddAsync(request);
-            return CreatedAtAction(nameof(GetMovie), new { id = movie.MovieId }, movie);
+        //Thêm phim
+        [HttpPost("AddFilm")]
+        public async Task<IActionResult> AddMovie([FromForm] RequestMovieDTO movieDTO, IFormFile posterFile, IFormFile avatarFile)
+        {
+            var result = await _movieRepository.AddAsync(movieDTO, posterFile, avatarFile);
+            if (result == null) return BadRequest("Failed to add movie");
+            return Ok(result);
         }
 
         // Sửa phim

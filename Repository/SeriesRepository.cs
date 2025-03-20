@@ -86,19 +86,5 @@ namespace Movie.Repository
             return seriesDTO;
         }
 
-        //// Lấy danh sách các tập phim theo Series
-        //public async Task<List<RequestEpisodeDTO>> GetEpisodesBySeriesIdAsync(int seriesId)
-        //{
-        //    var episodes = await _context.Episodes
-        //        .Where(e => e.SeriesId == seriesId)
-        //        .Select(e => new RequestEpisodeDTO
-        //        {
-        //            EpisodeNumber = e.EpisodeNumber,
-        //            Title = e.Title ?? "",
-        //            LinkFilmUrl = e.LinkFilmUrl
-        //        }).ToListAsync();
-
-        //    return episodes;
-        //}
     }
 }

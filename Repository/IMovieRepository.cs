@@ -5,7 +5,7 @@ namespace Movie.Repository
 {
     public interface IMovieRepository
     {
-        Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO);
+        Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO, RequestCategoryDTO categoryDTO, RequestActorDTO actorDTO, IFormFile posterFile, IFormFile avatarFile);
         Task<RequestMovieDTO?> UpdateAsync(RequestMovieDTO movieDTO);
         Task<RequestMovieDTO?> GetByIdAsync(int id);
         Task DeletedMovieAsync(int id);

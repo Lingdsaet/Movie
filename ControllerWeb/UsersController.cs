@@ -23,11 +23,11 @@ namespace Movie.ControllerWeb
         public async Task<IActionResult> SignUp([FromBody] UserDTO userDTO)
         {
             if (userDTO == null)
-                return BadRequest("Invalid user data");
+                return BadRequest("Dữ liệu người dùng không hợp lệ");
 
             var existingUser = await _userRepository.GetUserByUserNameAsync(userDTO.UserName);
             if (existingUser != null)
-                return Conflict("Username already exists");
+                return Conflict("Tên người dùng đã tồn tại");
 
             var user = new User
             {
@@ -38,7 +38,7 @@ namespace Movie.ControllerWeb
 
             await _userRepository.CreateUserAsync(user);
 
-            return Ok("User created successfully");
+            return Ok("Người dùng được tạo thành công");
         }
 
         // POST: api/User/Login
@@ -46,14 +46,14 @@ namespace Movie.ControllerWeb
         public async Task<IActionResult> Login([FromBody] LoginDTO userDTO)
         {
             if (userDTO == null)
-                return BadRequest("Invalid user data");
+                return BadRequest("Dữ liệu người dùng không hợp lệ");
 
             var user = await _userRepository.GetUserByUserNameAsync(userDTO.UserName);
 
             if (user == null || user.Password != userDTO.Password)
-                return Unauthorized("Invalid username or password");
+                return Unauthorized("Tên người dùng hoặc mật khẩu không hợp lệ");
 
-            return Ok("Login successful");
+            return Ok("Đăng nhập thành công");
         }
     }
 
