@@ -30,7 +30,10 @@ public class FileUploadOperation : IOperationFilter
                                 ["LinkFilmUrl"] = new OpenApiSchema { Type = "string" },
                                 ["DirectorId"] = new OpenApiSchema { Type = "integer" },
                                 ["IsHot"] = new OpenApiSchema { Type = "boolean" },
-                                ["YearReleased"] = new OpenApiSchema { Type = "integer" }
+                                ["YearReleased"] = new OpenApiSchema { Type = "integer" },
+                                ["categoryIds"] = new OpenApiSchema { Type = "integer" },
+                                ["actorIds"] = new OpenApiSchema { Type = "integer" },
+
                             }
                         }
                     }

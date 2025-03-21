@@ -44,9 +44,8 @@ namespace Movie.Controllers
             return Ok(movie);
         }
 
-        //Thêm phim
         [HttpPost("AddFilm")]
-        public async Task<IActionResult> AddMovie([FromForm] RequestMovieDTO movieDTO, IFormFile posterFile, IFormFile avatarFile)
+        public async Task<IActionResult> AddMovie([FromForm] RequestMovieDTO movieDTO,IFormFile posterFile, IFormFile avatarFile)
         {
             var result = await _movieRepository.AddAsync(movieDTO, posterFile, avatarFile);
             if (result == null) return BadRequest("Failed to add movie");
@@ -85,26 +84,6 @@ namespace Movie.Controllers
             return NoContent();
         }
 
-        //Danh sách xoá
-        [HttpGet("getDeleted")]
-        public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetDeletedMovie()
-        {
-            var deletedMovie = await _movieRepository.GetDeleteAsync();
 
-            if (deletedMovie == null || !deletedMovie.Any())
-            {
-                return NotFound(new { message = "No deleted Movie found!" });
-            }
-
-            return Ok(deletedMovie);
-        }
-
-        //  Xoá vĩnh viễn các phim có Status = 0
-        [HttpDelete("deleted")]
-        public async Task<IActionResult> DeletedMovie(int id)
-        {
-            await _movieRepository.DeletedMovieAsync(id);
-            return NoContent();
-        }
     }
 }

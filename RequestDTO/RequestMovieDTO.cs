@@ -30,6 +30,8 @@ public partial class RequestMovieDTO
 
     public DateTime? YearReleased { get; set; }
 
+    public string? ActorIds { get; set; }
+    public string? CategoryIds { get; set; }
     public int? Status { get; set; }
     public List<RequestCategoryDTO> Categories { get; set; } = new List<RequestCategoryDTO>();
     public List<RequestActorDTO> Actors {  get; set; } = new List<RequestActorDTO> { };
