@@ -25,7 +25,7 @@ public partial class movieDB : DbContext
 
     public virtual DbSet<Movies> Movies { get; set; }
 
-    public virtual DbSet<MovieActors> MovieActor { get; set; }
+    public virtual DbSet<MovieActor> MovieActor { get; set; }
 
     public virtual DbSet<MovieCategory> MovieCategories { get; set; }
 
@@ -76,7 +76,7 @@ public partial class movieDB : DbContext
             entity.HasOne(d => d.Director).WithMany(p => p.Movie).HasConstraintName("FK__Movie__Director__4316F928");
         });
 
-        modelBuilder.Entity<MovieActors>(entity =>
+        modelBuilder.Entity<MovieActor>(entity =>
         {
             entity.HasKey(e => new { e.MovieId, e.ActorId }).HasName("PK__MovieAct__75B25D7DE91BD012");
 

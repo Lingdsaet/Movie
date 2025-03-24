@@ -114,7 +114,7 @@ namespace Movie.Repository
 
                 foreach (var actor in actorId)
                 {
-                    _context.MovieActor.Add(new MovieActors
+                    _context.MovieActor.Add(new MovieActor
                     {
                         MovieId = movie.MovieId,
                         ActorId = Int32.Parse(actor)

@@ -5,7 +5,7 @@ using Movie.Models;
 
 namespace Movie.Repository
 {
-    public class MovieActorRepository : IMovieActorRepository<MovieActors>
+    public class MovieActorRepository : IMovieActorRepository<MovieActor>
     {
 
         private readonly movieDB _context;
@@ -17,7 +17,7 @@ namespace Movie.Repository
         {
             return await _context.Movies.CountAsync();
         }
-        public async Task AddAsync(MovieActors entity)
+        public async Task AddAsync(MovieActor entity)
         {
             await _context.MovieActor.AddAsync(entity);
             await _context.SaveChangesAsync();

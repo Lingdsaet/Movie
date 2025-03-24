@@ -27,7 +27,7 @@ public partial class Actor
     public string? AvatarUrl { get; set; }
 
     [InverseProperty("Actors")]
-    public virtual ICollection<MovieActors> MovieActor { get; set; } = new List<MovieActors>();
+    public virtual ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
 
     [InverseProperty("Actors")]
     public virtual ICollection<SeriesActor> SeriesActors { get; set; } = new List<SeriesActor>();

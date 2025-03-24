@@ -23,7 +23,7 @@ builder.Services.AddDbContext<movieDB>(opt => opt.UseSqlServer(cf.GetConnectionS
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieCategoryRepository<MovieCategory>, MovieCategoryRepository>();
-builder.Services.AddScoped<IMovieActorRepository<MovieActors>, MovieActorRepository>();
+builder.Services.AddScoped<IMovieActorRepository<MovieActor>, MovieActorRepository>();
 builder.Services.AddScoped<IMovieHome, MovieHomeRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
 builder.Services.AddScoped<IDirectorsRepository, DirectorRepository>();

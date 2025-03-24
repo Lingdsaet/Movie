@@ -47,7 +47,7 @@ public partial class Movies
     public virtual Director? Director { get; set; }
 
     [InverseProperty("Movie")]
-    public virtual ICollection<MovieActors> MovieActor { get; set; } = new List<MovieActors>();
+    public virtual ICollection<MovieActor> MovieActor { get; set; } = new List<MovieActor>();
 
     [InverseProperty("Movie")]
     public virtual ICollection<MovieCategory> MovieCategories { get; set; } = new List<MovieCategory>();
