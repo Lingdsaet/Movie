@@ -5,7 +5,7 @@ namespace Movie.RequestDTO;
 public partial class RequestCategoryDTO
 {
  
-    public int CategoriesId { get; set; }
+    public int CategoryId { get; set; }
 
 
     public string? CategoryName { get; set; } = null!;

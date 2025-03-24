@@ -17,11 +17,11 @@ namespace Movie.Repository
         public async Task<ActorDetailDTO?> GetActorByIdAsync(int id)
         {
             var actor = await _context.Actors
-                .Include(a => a.MovieActors)
+                .Include(a => a.MovieActor)
                     .ThenInclude(ma => ma.Movie)
                 .Include(a => a.SeriesActors)
                     .ThenInclude(ma => ma.Series)
-                .FirstOrDefaultAsync(a => a.ActorsId == id);
+                .FirstOrDefaultAsync(a => a.ActorId == id);
 
             if (actor == null) return null;
 
@@ -29,11 +29,11 @@ namespace Movie.Repository
             {
                 Actor = new RequestActorDTO
                 {
-                    ActorsId = actor.ActorsId,
+                    ActorId = actor.ActorId,
                     NameAct = actor.NameAct,
                     Nationality = actor.Nationality
                 },
-                Movie = actor.MovieActors.Select(ma => new ActorMovieDTO
+                Movie = actor.MovieActor.Select(ma => new ActorMovieDTO
                 {
                     MovieId = ma.Movie.MovieId,
                     AvatarUrl = ma.Movie.AvatarUrl,

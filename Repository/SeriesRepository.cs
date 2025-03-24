@@ -77,7 +77,7 @@ namespace Movie.Repository
                 TotalEpisode = series.Status ?? 0,
                 Actors = series.SeriesActors.Select(sa => new RequestActorDTO
                 {
-                    ActorsId = sa.ActorsId,
+                    ActorId = sa.ActorId,
                     NameAct = sa.Actors.NameAct
                 }).ToList(),
                 Director = series.Director?.NameDir ?? string.Empty

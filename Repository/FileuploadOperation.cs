@@ -23,7 +23,7 @@ public class FileUploadOperation : IOperationFilter
                             Properties = new Dictionary<string, OpenApiSchema>
                             {
                                 ["posterFile"] = new OpenApiSchema { Type = "string", Format = "binary" },
-                                ["avatarFile"] = new OpenApiSchema { Type = "string", Format = "binary" },
+                                ["AvatarUrlFile"] = new OpenApiSchema { Type = "string", Format = "binary" },
                                 ["Title"] = new OpenApiSchema { Type = "string" },
                                 ["Description"] = new OpenApiSchema { Type = "string" },
                                 ["Rating"] = new OpenApiSchema { Type = "number" },

@@ -4,7 +4,7 @@ namespace Movie.RequestDTO;
 public partial class RequestDirectorDTO
 {
 
-    public int DirectorID { get; set; }
+    public int DirectorId { get; set; }
 
     public string NameDir { get; set; } = null!;
 

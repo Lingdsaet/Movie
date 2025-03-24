@@ -9,7 +9,7 @@ namespace Movie.Models;
 public partial class Movies
 {
     [Key]
-    [Column("MovieID")]
+    [Column("MovieId")]
     public int MovieId { get; set; }
 
     [StringLength(255)]
@@ -18,7 +18,7 @@ public partial class Movies
 
     public string? Description { get; set; }
 
-    [Column("DirectorID")]
+    [Column("DirectorId")]
     public int? DirectorId { get; set; }
 
     [Column(TypeName = "decimal(3, 1)")]
@@ -28,7 +28,7 @@ public partial class Movies
     [StringLength(255)]
     public string? PosterUrl { get; set; }
 
-    [Column("AvatarURl")]
+    [Column("AvatarUrl")]
     [StringLength(255)]
     public string? AvatarUrl { get; set; }
 
@@ -47,7 +47,7 @@ public partial class Movies
     public virtual Director? Director { get; set; }
 
     [InverseProperty("Movie")]
-    public virtual ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();
+    public virtual ICollection<MovieActors> MovieActor { get; set; } = new List<MovieActors>();
 
     [InverseProperty("Movie")]
     public virtual ICollection<MovieCategory> MovieCategories { get; set; } = new List<MovieCategory>();

@@ -5,7 +5,7 @@ using Movie.Models;
 
 namespace Movie.Repository
 {
-    public class MovieActorRepository : IMovieActorRepository<MovieActor>
+    public class MovieActorRepository : IMovieActorRepository<MovieActors>
     {
 
         private readonly movieDB _context;
@@ -17,15 +17,15 @@ namespace Movie.Repository
         {
             return await _context.Movies.CountAsync();
         }
-        public async Task AddAsync(MovieActor entity)
+        public async Task AddAsync(MovieActors entity)
         {
-            await _context.MovieActors.AddAsync(entity);
+            await _context.MovieActor.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
-        public async Task DeleteByMovieIdAsync(int movieId)
+        public async Task DeleteByMovieIdAsync(int MovieId)
         {
-            var actors = _context.MovieActors.Where(mc => mc.MovieId == movieId);
-            _context.MovieActors.RemoveRange(actors);
+            var actors = _context.MovieActor.Where(mc => mc.MovieId == MovieId);
+            _context.MovieActor.RemoveRange(actors);
             await _context.SaveChangesAsync();
         }
     }

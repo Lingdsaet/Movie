@@ -26,7 +26,7 @@ namespace Movie.Repository
             {
                 Director = new RequestDirectorDTO
                 {
-                    DirectorID = director.DirectorId,
+                    DirectorId = director.DirectorId,
                     NameDir = director.NameDir,
                     Nationality = director.Nationality
                 },

@@ -9,7 +9,7 @@ namespace Movie.Models;
 public partial class Director
 {
     [Key]
-    [Column("DirectorID")]
+    [Column("DirectorId")]
     public int DirectorId { get; set; }
 
     [StringLength(225)]
@@ -24,7 +24,7 @@ public partial class Director
     public string? Professional { get; set; }
 
     [StringLength(255)]
-    public string? Avatar { get; set; }
+    public string? AvatarUrl { get; set; }
 
     [InverseProperty("Director")]
     public virtual ICollection<Movies> Movie { get; set; } = new List<Movies>();

@@ -6,21 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Movie.Models;
 
-[PrimaryKey("MovieId", "CategoriesId")]
+[PrimaryKey("MovieId", "CategoryId")]
 public partial class MovieCategory
 {
     [Key]
-    [Column("MovieID")]
+    [Column("MovieId")]
     public int MovieId { get; set; }
 
     [Key]
-    [Column("CategoriesID")]
-    public int CategoriesId { get; set; }
+    [Column("CategoryId")]
+    public int CategoryId { get; set; }
 
     [Column("MovieCategoryID")]
     public int MovieCategoryId { get; set; }
 
-    [ForeignKey("CategoriesId")]
+    [ForeignKey("CategoryId")]
     [InverseProperty("MovieCategories")]
     public virtual Category Categories { get; set; } = null!;
 

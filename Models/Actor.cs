@@ -9,8 +9,8 @@ namespace Movie.Models;
 public partial class Actor
 {
     [Key]
-    [Column("ActorsID")]
-    public int ActorsId { get; set; }
+    [Column("ActorId")]
+    public int ActorId { get; set; }
 
     [StringLength(225)]
     public string NameAct { get; set; } = null!;
@@ -27,7 +27,7 @@ public partial class Actor
     public string? AvatarUrl { get; set; }
 
     [InverseProperty("Actors")]
-    public virtual ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();
+    public virtual ICollection<MovieActors> MovieActor { get; set; } = new List<MovieActors>();
 
     [InverseProperty("Actors")]
     public virtual ICollection<SeriesActor> SeriesActors { get; set; } = new List<SeriesActor>();

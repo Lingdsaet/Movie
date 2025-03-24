@@ -10,8 +10,8 @@ namespace Movie.Models;
 public partial class Category
 {
     [Key]
-    [Column("CategoriesID")]
-    public int CategoriesId { get; set; }
+    [Column("CategoryId")]
+    public int CategoryId { get; set; }
 
     [StringLength(50)]
     public string CategoryName { get; set; } = null!;

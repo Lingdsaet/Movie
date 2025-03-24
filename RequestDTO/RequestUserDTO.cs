@@ -17,7 +17,7 @@ public partial class RequestUserDTO
     public string Password { get; set; } = null!;
 
 
-    public DateTime? Createdat { get; set; }
+    public DateTime? CreatedDate { get; set; }
 
 
     public virtual ICollection<RequestPaymentDTO> Payments { get; set; } = new List<RequestPaymentDTO>();

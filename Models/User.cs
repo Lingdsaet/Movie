@@ -24,7 +24,7 @@ public partial class User
     public string Password { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
-    public DateTime? Createdat { get; set; }
+    public DateTime? CreatedDate { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

@@ -17,7 +17,7 @@ public partial class Series
 
     public string? Description { get; set; }
 
-    [Column("DirectorID")]
+    [Column("DirectorId")]
     public int? DirectorId { get; set; }
 
     [Column(TypeName = "decimal(3, 1)")]
@@ -34,7 +34,7 @@ public partial class Series
     [StringLength(255)]
     public string? PosterUrl { get; set; }
 
-    [Column("AvatarURl")]
+    [Column("AvatarUrl")]
     [StringLength(255)]
     public string? AvatarUrl { get; set; }
 

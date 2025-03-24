@@ -25,7 +25,7 @@ public partial class movieDB : DbContext
 
     public virtual DbSet<Movies> Movies { get; set; }
 
-    public virtual DbSet<MovieActor> MovieActors { get; set; }
+    public virtual DbSet<MovieActors> MovieActor { get; set; }
 
     public virtual DbSet<MovieCategory> MovieCategories { get; set; }
 
@@ -47,12 +47,12 @@ public partial class movieDB : DbContext
     {
         modelBuilder.Entity<Actor>(entity =>
         {
-            entity.HasKey(e => e.ActorsId).HasName("PK__Actors__E60C94727B530F37");
+            entity.HasKey(e => e.ActorId).HasName("PK__Actors__E60C94727B530F37");
         });
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoriesId).HasName("PK__Categori__EFF907B09DB23D2A");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__EFF907B09DB23D2A");
         });
 
         modelBuilder.Entity<Director>(entity =>
@@ -76,20 +76,20 @@ public partial class movieDB : DbContext
             entity.HasOne(d => d.Director).WithMany(p => p.Movie).HasConstraintName("FK__Movie__Director__4316F928");
         });
 
-        modelBuilder.Entity<MovieActor>(entity =>
+        modelBuilder.Entity<MovieActors>(entity =>
         {
-            entity.HasKey(e => new { e.MovieId, e.ActorsId }).HasName("PK__MovieAct__75B25D7DE91BD012");
+            entity.HasKey(e => new { e.MovieId, e.ActorId }).HasName("PK__MovieAct__75B25D7DE91BD012");
 
             entity.Property(e => e.MovieActorId).ValueGeneratedOnAdd();
 
-            entity.HasOne(d => d.Actors).WithMany(p => p.MovieActors).HasConstraintName("FK__MovieActo__Actor__5812160E");
+            entity.HasOne(d => d.Actors).WithMany(p => p.MovieActor).HasConstraintName("FK__MovieActo__Actor__5812160E");
 
-            entity.HasOne(d => d.Movie).WithMany(p => p.MovieActors).HasConstraintName("FK__MovieActo__Movie__571DF1D5");
+            entity.HasOne(d => d.Movie).WithMany(p => p.MovieActor).HasConstraintName("FK__MovieActo__Movie__571DF1D5");
         });
 
         modelBuilder.Entity<MovieCategory>(entity =>
         {
-            entity.HasKey(e => new { e.MovieId, e.CategoriesId }).HasName("PK__MovieCat__552D04414C23C869");
+            entity.HasKey(e => new { e.MovieId, e.CategoryId }).HasName("PK__MovieCat__552D04414C23C869");
 
             entity.Property(e => e.MovieCategoryId).ValueGeneratedOnAdd();
 
@@ -116,7 +116,7 @@ public partial class movieDB : DbContext
 
         modelBuilder.Entity<SeriesActor>(entity =>
         {
-            entity.HasKey(e => new { e.SeriesId, e.ActorsId }).HasName("PK__SeriesAc__CDC108463B24E581");
+            entity.HasKey(e => new { e.SeriesId, e.ActorId }).HasName("PK__SeriesAc__CDC108463B24E581");
 
             entity.Property(e => e.SeriesActorId).ValueGeneratedOnAdd();
 
@@ -127,9 +127,9 @@ public partial class movieDB : DbContext
 
         modelBuilder.Entity<SeriesCategory>(entity =>
         {
-            entity.HasKey(e => new { e.SeriesId, e.CategoriesId }).HasName("PK__SeriesCa__ED5E517A2E8C616E");
+            entity.HasKey(e => new { e.SeriesId, e.CategoryId }).HasName("PK__SeriesCa__ED5E517A2E8C616E");
 
-            entity.Property(e => e.SeriesCategoriesId).ValueGeneratedOnAdd();
+            entity.Property(e => e.SeriesCategoryId).ValueGeneratedOnAdd();
 
             entity.HasOne(d => d.Categories).WithMany(p => p.SeriesCategories).HasConstraintName("FK__SeriesCat__Categ__5441852A");
 
@@ -140,7 +140,7 @@ public partial class movieDB : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC901230A1");
 
-            entity.Property(e => e.Createdat).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -61,14 +61,14 @@ namespace Movie.Repository
             }
 
             // Lưu đường dẫn  
-            return $" C:/Users/phlinh/Documents/C#/Movie/Assets/{folderName}/{fileName}";
+            return $" https://source.cmcglobal.com.vn/g1/du1.33/be-base/-/raw/main/Assets/{folderName}/{fileName}";
         }
 
         //  Thêm phim
-        public async Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO, IFormFile posterFile, IFormFile avatarFile)
+        public async Task<RequestMovieDTO> AddAsync(RequestMovieDTO movieDTO, IFormFile posterFile, IFormFile AvatarUrlFile)
         {
             var posterUrl = await SaveFileAsync(posterFile, "Posters");
-            var avatarUrl = await SaveFileAsync(avatarFile, "Avatars");
+            var AvatarUrl = await SaveFileAsync(AvatarUrlFile, "AvatarUrl");
 
             var movie = new Movies
             {
@@ -76,7 +76,7 @@ namespace Movie.Repository
                 Description = movieDTO.Description,
                 Rating = movieDTO.Rating,
                 PosterUrl = posterUrl,
-                AvatarUrl = avatarUrl,
+                AvatarUrl = AvatarUrl,
                 LinkFilmUrl = movieDTO.LinkFilmUrl,              
                 DirectorId = movieDTO.DirectorId,
                 IsHot = movieDTO.IsHot,
@@ -88,7 +88,7 @@ namespace Movie.Repository
             await _context.SaveChangesAsync();
 
             movieDTO.PosterUrl = posterUrl;
-            movieDTO.AvatarUrl = avatarUrl;
+            movieDTO.AvatarUrl = AvatarUrl;
 
            
             
@@ -102,22 +102,22 @@ namespace Movie.Repository
                     _context.MovieCategories.Add(new MovieCategory
                     {
                         MovieId = movie.MovieId,
-                        CategoriesId = Int32.Parse(category)
+                        CategoryId = Int32.Parse(category)
                     });
                 }
             }
 
-            //  Xử lý thêm Actor vào MovieActor
+            //  Xử lý thêm Actor vào MovieActors
             if (movieDTO.ActorIds != null && movieDTO.ActorIds.Any())
             {
                 string[] actorId = movieDTO.ActorIds.Split(',');
 
                 foreach (var actor in actorId)
                 {
-                    _context.MovieActors.Add(new MovieActor
+                    _context.MovieActor.Add(new MovieActors
                     {
                         MovieId = movie.MovieId,
-                        ActorsId = Int32.Parse(actor)
+                        ActorId = Int32.Parse(actor)
                     });
                 }
             }
@@ -125,7 +125,7 @@ namespace Movie.Repository
             await _context.SaveChangesAsync();
 
             movieDTO.PosterUrl = posterUrl;
-            movieDTO.AvatarUrl = avatarUrl;
+            movieDTO.AvatarUrl = AvatarUrl;
 
             return movieDTO;
         }
@@ -152,11 +152,12 @@ namespace Movie.Repository
             return movieDTO;
         }
 
+
         public async Task<IEnumerable<RequestMovieDTO>> GetMovieAsync(int pageNumber, int pageSize, string sortBy, string search, int? categoryID)
         {
             var query = _context.Movies
                 .Include(m => m.Director)
-                .Include(m => m.MovieActors).ThenInclude(ma => ma.Actors)
+                .Include(m => m.MovieActor).ThenInclude(ma => ma.Actors)
                 .Include(m => m.MovieCategories).ThenInclude(mc => mc.Categories)
                 .Where(m => m.Status == 1);
 
@@ -168,7 +169,7 @@ namespace Movie.Repository
 
             if (categoryID.HasValue)
             {
-                query = query.Where(m => m.MovieCategories.Any(mc => mc.CategoriesId == categoryID.Value));
+                query = query.Where(m => m.MovieCategories.Any(mc => mc.CategoryId == categoryID.Value));
             }
 
             //  Sorting
@@ -195,14 +196,14 @@ namespace Movie.Repository
                 LinkFilmUrl = m.LinkFilmUrl,
                 DirectorId = m.DirectorId,
                 Director = m.Director?.NameDir,
-                Actors = m.MovieActors.Select(ma => new RequestActorDTO
+                Actors = m.MovieActor.Select(ma => new RequestActorDTO
                 {
-                    ActorsId = ma.Actors.ActorsId,
+                    ActorId = ma.Actors.ActorId,
                     NameAct = ma.Actors.NameAct
                 }).ToList(),
                 Categories = m.MovieCategories.Select(mc => new RequestCategoryDTO
                 {
-                    CategoriesId = mc.Categories.CategoriesId,
+                    CategoryId = mc.Categories.CategoryId,
                     CategoryName = mc.Categories.CategoryName
                 }).ToList()
             }).ToList();
@@ -225,7 +226,7 @@ namespace Movie.Repository
 
             var movie = await _context.Movies
                 .Include(m => m.Director)
-                .Include(m => m.MovieActors)
+                .Include(m => m.MovieActor)
                     .ThenInclude(ma => ma.Actors)
                 .Include(m => m.MovieCategories)
                     .ThenInclude(mc => mc.Categories)
@@ -245,9 +246,9 @@ namespace Movie.Repository
                         CategoryName = mc.Categories.CategoryName
                     }).ToList(),
                 Description = movie.Description,
-                Actors = movie.MovieActors.Select(ma => new RequestActorDTO
+                Actors = movie.MovieActor.Select(ma => new RequestActorDTO
                 {
-                    ActorsId = ma.ActorsId,
+                    ActorId = ma.ActorId,
                     NameAct = ma.Actors.NameAct
                 }).ToList(),
                 Director = movie.Director!.NameDir

@@ -45,15 +45,15 @@ namespace Movie.Controllers
         }
 
         [HttpPost("AddFilm")]
-        public async Task<IActionResult> AddMovie([FromForm] RequestMovieDTO movieDTO,IFormFile posterFile, IFormFile avatarFile)
+        public async Task<IActionResult> AddMovie([FromForm] RequestMovieDTO movieDTO,IFormFile posterFile, IFormFile AvatarUrlFile)
         {
-            var result = await _movieRepository.AddAsync(movieDTO, posterFile, avatarFile);
+            var result = await _movieRepository.AddAsync(movieDTO, posterFile, AvatarUrlFile);
             if (result == null) return BadRequest("Failed to add movie");
             return Ok(result);
         }
 
         // Sửa phim
-        [HttpPut("{id}")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> UpdateMovie(int id, [FromBody] RequestMovieDTO request)
         {
             if (request == null || id != request.MovieId)

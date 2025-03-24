@@ -17,9 +17,9 @@ namespace Movie.Repository
             await _context.MovieCategories.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
-        public async Task DeleteByMovieIdAsync(int movieId)
+        public async Task DeleteByMovieIdAsync(int MovieId)
         {
-            var categories = _context.MovieCategories.Where(mc => mc.MovieId == movieId);
+            var categories = _context.MovieCategories.Where(mc => mc.MovieId == MovieId);
             _context.MovieCategories.RemoveRange(categories);
             await _context.SaveChangesAsync();
         }
