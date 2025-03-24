@@ -5,6 +5,18 @@ using Movie.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowSpecificOrigins = "allowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyHeader();
+                          policy.AllowAnyMethod();
+                          policy.AllowAnyOrigin();
+                      });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
