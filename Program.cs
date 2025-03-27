@@ -34,7 +34,7 @@ IConfigurationRoot cf = new ConfigurationBuilder().SetBasePath(AppDomain.Current
 builder.Services.AddDbContext<movieDB>(opt => opt.UseSqlServer(cf.GetConnectionString("cnn")));
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IMovieCategoryRepository<MovieCategory>, MovieCategoryRepository>();
+builder.Services.AddScoped<IMovieCategoryRepository<MovieCategorys>, MovieCategoryRepository>();
 builder.Services.AddScoped<IMovieActorRepository<MovieActor>, MovieActorRepository>();
 builder.Services.AddScoped<IMovieHome, MovieHomeRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
@@ -52,7 +52,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// ??m b?o th? m?c Assets ?ã ???c thi?t l?p
+// ??m b?o th? m?c Assets ?Ã£ ???c thi?t l?p
 //var folderPath = Path.Combine(app.Environment.WebRootPath, "Assets");
 //if (!Directory.Exists(folderPath))
 //{
