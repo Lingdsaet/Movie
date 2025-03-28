@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Scripting;
 using Movie.Models;
 using Movie.Repository;
 using Movie.ResponseDTO;

@@ -15,11 +15,11 @@ public partial class movieDB : DbContext
     {
     }
 
-    public virtual DbSet<Actors> Actors { get; set; }
+    public virtual DbSet<Actor> Actors { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<Directors> Directors { get; set; }
+    public virtual DbSet<Director> Directors { get; set; }
 
     public virtual DbSet<Episode> Episodes { get; set; }
 
@@ -27,25 +27,25 @@ public partial class movieDB : DbContext
 
     public virtual DbSet<MovieActors> MovieActor { get; set; }
 
-    public virtual DbSet<MovieCategory> MovieCategories { get; set; }
+    public virtual DbSet<MovieCategories> MovieCategories { get; set; }
 
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Series> Series { get; set; }
 
-    public virtual DbSet<SeriesActor> SeriesActors { get; set; }
+    public virtual DbSet<SeriesActors> SeriesActors { get; set; }
 
-    public virtual DbSet<SeriesCategory> SeriesCategories { get; set; }
+    public virtual DbSet<SeriesCategories> SeriesCategories { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source =HNDW-PHLINH-TTS\\SQLEXPRESS; Database =movieDB;User ID=sa;Password=123456;Encrypt=false;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Data Source =DESKTOP-J4NABFA; Database =movieDB;User ID=sa;Password=1234;Encrypt=false;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Actors>(entity =>
+        modelBuilder.Entity<Actor>(entity =>
         {
             entity.HasKey(e => e.ActorId).HasName("PK__Actors__E60C94727B530F37");
         });
@@ -55,7 +55,7 @@ public partial class movieDB : DbContext
             entity.HasKey(e => e.CategoryId).HasName("PK__Categori__EFF907B09DB23D2A");
         });
 
-        modelBuilder.Entity<Directors>(entity =>
+        modelBuilder.Entity<Director>(entity =>
         {
             entity.HasKey(e => e.DirectorId).HasName("PK__Director__26C69E26795B95C7");
         });
@@ -87,7 +87,7 @@ public partial class movieDB : DbContext
             entity.HasOne(d => d.Movie).WithMany(p => p.MovieActor).HasConstraintName("FK__MovieActo__Movie__571DF1D5");
         });
 
-        modelBuilder.Entity<MovieCategory>(entity =>
+        modelBuilder.Entity<MovieCategories>(entity =>
         {
             entity.HasKey(e => new { e.MovieId, e.CategoryId }).HasName("PK__MovieCat__552D04414C23C869");
 
@@ -114,7 +114,7 @@ public partial class movieDB : DbContext
             entity.HasOne(d => d.Director).WithMany(p => p.Series).HasConstraintName("FK__Series__Director__46E78A0C");
         });
 
-        modelBuilder.Entity<SeriesActor>(entity =>
+        modelBuilder.Entity<SeriesActors>(entity =>
         {
             entity.HasKey(e => new { e.SeriesId, e.ActorId }).HasName("PK__SeriesAc__CDC108463B24E581");
 
@@ -125,7 +125,7 @@ public partial class movieDB : DbContext
             entity.HasOne(d => d.Series).WithMany(p => p.SeriesActors).HasConstraintName("FK__SeriesAct__Serie__5AEE82B9");
         });
 
-        modelBuilder.Entity<SeriesCategory>(entity =>
+        modelBuilder.Entity<SeriesCategories>(entity =>
         {
             entity.HasKey(e => new { e.SeriesId, e.CategoryId }).HasName("PK__SeriesCa__ED5E517A2E8C616E");
 

@@ -16,31 +16,7 @@ namespace Movie.Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<Series>> GetAllAsync()
-        {
-            return await _context.Series.ToListAsync();
-        }
-
-        public Task<Series> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddAsync(Series entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Series entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public async Task<RequestSeriesDTO> GetSeriesByIdAsync(int id)
         {
 
@@ -52,12 +28,11 @@ namespace Movie.Repository
             .Include(s => s.Director)
             .FirstOrDefaultAsync(s => s.SeriesId == id);
 
-            if (series == null) return null!;
+            if (series == null) return null;
 
             var seriesDTO = new RequestSeriesDTO
             {
                 Title = series.Title,
-                LinkFilmUrl = series.LinkFilmUrl ?? string.Empty,
                 YearReleased = series.YearReleased,
                 Nation = series.Nation ?? string.Empty,
                 Categories = series.SeriesCategories
@@ -86,60 +61,45 @@ namespace Movie.Repository
             return seriesDTO;
         }
 
-        public async Task<IEnumerable<RequestMovieDTO>> GetMovieAsync(int pageNumber, int pageSize, string sortBy, string search, int? categoryID)
+        public async Task<IEnumerable<RequestSeriesDTO>> GetSeriesAsync(int pageNumber, int pageSize, string sortBy, string search, int? categoryID)
         {
-            var query = _context.Movies
-                .Include(m => m.Director)
-                .Include(m => m.MovieActor).ThenInclude(ma => ma.Actors)
-                .Include(m => m.MovieCategories).ThenInclude(mc => mc.Categories)
-                .Where(m => m.Status == 1);
+            var query = _context.Series
+                .Where(s => s.Status == 1); 
 
-            //  Filtering
+            // Filtering
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(m => m.Title.Contains(search));
+                query = query.Where(s => s.Title.Contains(search));
             }
 
             if (categoryID.HasValue)
             {
-                query = query.Where(m => m.MovieCategories.Any(mc => mc.CategoryId == categoryID.Value));
+                query = query.Where(s => s.SeriesCategories.Any(sc => sc.CategoryId == categoryID.Value));
             }
 
-            //  Sorting
+            // Sorting
             query = sortBy switch
             {
-                "Title" => query.OrderBy(m => m.Title),
-                "Rating" => query.OrderByDescending(m => m.Rating),
-                _ => query.OrderBy(m => m.Title)
+                "Title" => query.OrderBy(s => s.Title),
+                "Rating" => query.OrderByDescending(s => s.Rating),
+                _ => query.OrderBy(s => s.Title)
             };
 
-            var Movie = await query
+            var seriesList = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            return Movie.Select(m => new RequestMovieDTO
+            return seriesList.Select(s => new RequestSeriesDTO
             {
-                MovieId = m.MovieId,
-                Title = m.Title,
-                Description = m.Description,
-                Rating = m.Rating,
-                PosterUrl = m.PosterUrl,
-                AvatarUrl = m.AvatarUrl,
-                LinkFilmUrl = m.LinkFilmUrl,
-                DirectorId = m.DirectorId,
-                Director = m.Director?.NameDir,
-                Actors = m.MovieActor.Select(ma => new RequestActorDTO
-                {
-                    ActorId = ma.Actors.ActorId,
-                    NameAct = ma.Actors.NameAct
-                }).ToList(),
-                Categories = m.MovieCategories.Select(mc => new RequestCategoryDTO
-                {
-                    CategoryId = mc.Categories.CategoryId,
-                    CategoryName = mc.Categories.CategoryName
-                }).ToList()
+                SeriesId = s.SeriesId,
+                Title = s.Title,
+                PosterUrl = s.PosterUrl,
+                AvatarUrl = s.AvatarUrl,
+
+               
             }).ToList();
         }
+
     }
 }

@@ -20,9 +20,16 @@ namespace Movie.Repository
 
         public async Task<RequestMovieDTO?> GetByIdAsync(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null) return null;
 
+            var movie = await _context.Movies
+            .Include(b => b.MovieActor)
+                .ThenInclude(sa => sa.Actors)
+            .Include(b => b.MovieCategories)
+                .ThenInclude(sc => sc.Categories)
+            .Include(b => b.Director)
+            .FirstOrDefaultAsync(b => b.MovieId == id);
+
+            if (movie == null) return null;
             return new RequestMovieDTO
             {
                 MovieId = movie.MovieId,
@@ -32,11 +39,19 @@ namespace Movie.Repository
                 PosterUrl = movie.PosterUrl,
                 AvatarUrl = movie.AvatarUrl,
                 LinkFilmUrl = movie.LinkFilmUrl,
-                DirectorId = movie.DirectorId,
-                Director = movie.Director?.NameDir,
                 IsHot = movie.IsHot,
-                YearReleased = movie.YearReleased
-
+                YearReleased = movie.YearReleased,
+                Categories = movie.MovieCategories
+                    .Select(sc => new RequestCategoryDTO
+                    {
+                        CategoryName = sc.Categories.CategoryName
+                    }).ToList(),
+                Actors = movie.MovieActor.Select(sa => new RequestActorDTO
+                {
+                    ActorId = sa.ActorId,
+                    NameAct = sa.Actors.NameAct
+                }).ToList(),
+                Director = movie.Director?.NameDir ?? string.Empty
             };
         }
 
@@ -99,7 +114,7 @@ namespace Movie.Repository
 
                 foreach (var category in categoryId)
                 {
-                    _context.MovieCategories.Add(new MovieCategory
+                    _context.MovieCategories.Add(new MovieCategories
                     {
                         MovieId = movie.MovieId,
                         CategoryId = Int32.Parse(category)

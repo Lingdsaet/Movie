@@ -22,7 +22,7 @@ public partial class MovieActors
 
     [ForeignKey("ActorId")]
     [InverseProperty("MovieActor")]
-    public virtual Actors Actors { get; set; } = null!;
+    public virtual Actor Actors { get; set; } = null!;
 
     [ForeignKey("MovieId")]
     [InverseProperty("MovieActor")]

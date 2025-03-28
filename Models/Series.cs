@@ -24,11 +24,9 @@ public partial class Series
     public decimal? Rating { get; set; }
 
     public int? Season { get; set; }
-    public string? Nation { get; set; }
-
-    [Column("LinkFilmUrl")]
+    [Column("Nation")]
     [StringLength(255)]
-    public string? LinkFilmUrl { get; set; }
+    public string? Nation { get; set; }
 
     [Column("PosterURL")]
     [StringLength(255)]
@@ -44,16 +42,17 @@ public partial class Series
 
     public int? YearReleased { get; set; }
 
+
     [ForeignKey("DirectorId")]
     [InverseProperty("Series")]
-    public virtual Directors? Director { get; set; }
+    public virtual Director? Director { get; set; }
 
     [InverseProperty("Series")]
     public virtual ICollection<Episode> Episodes { get; set; } = new List<Episode>();
 
     [InverseProperty("Series")]
-    public virtual ICollection<SeriesActor> SeriesActors { get; set; } = new List<SeriesActor>();
+    public virtual ICollection<SeriesActors> SeriesActors { get; set; } = new List<SeriesActors>();
 
     [InverseProperty("Series")]
-    public virtual ICollection<SeriesCategory> SeriesCategories { get; set; } = new List<SeriesCategory>();
+    public virtual ICollection<SeriesCategories> SeriesCategories { get; set; } = new List<SeriesCategories>();
 }

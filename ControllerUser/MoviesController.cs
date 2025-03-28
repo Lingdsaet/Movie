@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Movie.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Movie.Repository;
+using Movie.RequestDTO;
 
 namespace Movie.ControllerWeb
 {
@@ -31,5 +25,20 @@ namespace Movie.ControllerWeb
 
             return Ok(movie);
         }
+        //  Lấy danh sách phim + phân trang+ lọc + sắp xếp
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetMovie(
+            int pageNumber = 1,
+            int pageSize = 10,
+            int? categoryID = null,
+            string sortBy = "Title",
+            string search = ""
+            )
+        {
+            var Movie = await _movieRepository.GetMovieAsync(pageNumber, pageSize, sortBy, search, categoryID);
+            return Ok(Movie);
+        }
+
+
     }
 }

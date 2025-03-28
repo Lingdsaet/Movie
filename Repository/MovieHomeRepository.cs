@@ -59,7 +59,7 @@ namespace Movie.Repository
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<RequestMovieDTO>> GetSeriesMovieAsync()
+        public async Task<IEnumerable<RequestMovieDTO>> GetSeriesAsync()
         {
             var query = _context.Series
                 .Where(s => s.Status == 1)

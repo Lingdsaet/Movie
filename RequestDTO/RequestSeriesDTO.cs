@@ -15,7 +15,6 @@ public partial class RequestSeriesDTO
     public decimal? Rating { get; set; }
     public int Season { get; set; }
     public string? PosterUrl { get; set; }
-    public string? LinkFilmUrl { get; set; }
     public string? AvatarUrl { get; set; }
     public int Status { get; internal set; }
     public int? YearReleased { get; set; }

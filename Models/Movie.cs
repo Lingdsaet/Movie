@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Movie.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Movie.Models;
 
 namespace Movies.Models;
 
-public partial class Movies
+public partial class Movie
 {
     [Key]
     [Column("MovieID")]
@@ -41,18 +41,18 @@ public partial class Movies
 
     [ForeignKey("DirectorID")]
     [InverseProperty("Movies")]
-    public virtual Directors? Director { get; set; }
+    public virtual Director? Director { get; set; }
 
     public int? Status { get; set; }
 
 
     [ForeignKey("MovieID")]
     [InverseProperty("Movies")]
-    public virtual ICollection<Actors> Actors { get; set; } = new List<Actors>();
+    public virtual ICollection<Actor> Actors { get; set; } = new List<Actor>();
 
     [ForeignKey("MovieID")]
     [InverseProperty("Movies")]
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
     public virtual ICollection<MovieActors> MovieActor { get; set; } = new List<MovieActors>();
-    public virtual ICollection<MovieCategory> MovieCategory { get; set; } = new List<MovieCategory>();
+    public virtual ICollection<MovieCategories> MovieCategory { get; set; } = new List<MovieCategories>();
 }
