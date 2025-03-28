@@ -52,7 +52,7 @@ public partial class Movie
 
     [ForeignKey("MovieID")]
     [InverseProperty("Movies")]
-    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+    public virtual ICollection<Categories> Categories { get; set; } = new List<Categories>();
     public virtual ICollection<MovieActors> MovieActor { get; set; } = new List<MovieActors>();
     public virtual ICollection<MovieCategories> MovieCategory { get; set; } = new List<MovieCategories>();
 }

@@ -22,7 +22,7 @@ public partial class SeriesCategories
 
     [ForeignKey("CategoryId")]
     [InverseProperty("SeriesCategories")]
-    public virtual Category Categories { get; set; } = null!;
+    public virtual Categories Categories { get; set; } = null!;
 
     [ForeignKey("SeriesId")]
     [InverseProperty("SeriesCategories")]

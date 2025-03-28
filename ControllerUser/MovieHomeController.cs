@@ -1,7 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Movie.Repository;
-using Movie.RequestDTO;
+
 
 namespace Movie.ControllerUser
 {

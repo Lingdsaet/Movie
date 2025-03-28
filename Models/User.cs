@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace Movie.Models;
 
-[Index("UserName", Name = "UQ__Users__536C85E4C82ADC90", IsUnique = true)]
-[Index("Email", Name = "UQ__Users__A9D105346A615AC5", IsUnique = true)]
 public partial class User
 {
     [Key]
@@ -23,8 +22,10 @@ public partial class User
     [StringLength(255)]
     public string Password { get; set; } = null!;
 
-    [Column(TypeName = "datetime")]
+    [Column("CreatedDate")]
     public DateTime? CreatedDate { get; set; }
+
+    public int Status { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

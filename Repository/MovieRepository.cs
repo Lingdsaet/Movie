@@ -147,26 +147,6 @@ namespace Movie.Repository
         
 
 
-        // Sửa 
-        public async Task<RequestMovieDTO?> UpdateAsync(RequestMovieDTO movieDTO)
-        {
-            var movie = await _context.Movies.FindAsync(movieDTO.MovieId);
-            if (movie == null) return null;
-
-            movie.Title = movieDTO.Title;
-            movie.Description = movieDTO.Description;
-            movie.Rating = movieDTO.Rating;
-            movie.PosterUrl = movieDTO.PosterUrl;
-            movie.AvatarUrl = movieDTO.AvatarUrl;
-            movie.LinkFilmUrl = movieDTO.LinkFilmUrl;
-            movie.DirectorId = movieDTO.DirectorId;
-            movie.IsHot = movieDTO.IsHot;
-            movie.YearReleased = movie.YearReleased;
-
-            await _context.SaveChangesAsync();
-            return movieDTO;
-        }
-
 
         public async Task<IEnumerable<RequestMovieDTO>> GetMovieAsync(int pageNumber, int pageSize, string sortBy, string search, int? categoryID)
         {

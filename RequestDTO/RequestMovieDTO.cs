@@ -1,10 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using Movie.Models;
-
-namespace Movie.RequestDTO;
+﻿namespace Movie.RequestDTO;
 
 public partial class RequestMovieDTO
 {

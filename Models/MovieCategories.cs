@@ -17,12 +17,12 @@ public partial class MovieCategories
     [Column("CategoryId")]
     public int CategoryId { get; set; }
 
-    [Column("MovieCategoryID")]
+    [Column("MovieCategoryId")]
     public int MovieCategoryId { get; set; }
 
     [ForeignKey("CategoryId")]
     [InverseProperty("MovieCategories")]
-    public virtual Category Categories { get; set; } = null!;
+    public virtual Categories Categories { get; set; } = null!;
 
     [ForeignKey("MovieId")]
     [InverseProperty("MovieCategories")]
