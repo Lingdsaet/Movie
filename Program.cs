@@ -3,14 +3,13 @@ using Microsoft.OpenApi.Models;
 using Movie.Models;
 using Movie.Repository;
 using Movie.Service;
-
-
+using Newtonsoft.Json; // Add this using directive
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson; // Add this using directive
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Thêm d?ch v? vào container.
 builder.Services.AddControllers();
-
 
 // Thêm Swagger cho OpenAPI
 builder.Services.AddScoped<JwtService>(); // Register JwtService as Scoped
@@ -25,9 +24,6 @@ builder.Services.AddSwaggerGen(c =>
     // Thêm ph?n h? tr? file upload
     c.OperationFilter<FileUploadOperation>();
 });
-
-
-
 
 // ??c c?u hình t? appsettings.json
 IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -44,7 +40,7 @@ builder.Services.AddMvc(options =>
     options.EnableEndpointRouting = false;
 }).AddNewtonsoftJson(opt =>
 {
-    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
 
 builder.Services.AddCors(options =>
@@ -54,7 +50,6 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
-
 
 // Thêm các repository vào container
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
@@ -66,6 +61,8 @@ builder.Services.AddScoped<IDirectorsRepository, DirectorRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IUserUserRepository, UserUserRepository>();
+builder.Services.AddScoped<ContentRepository>();
 
 
 var app = builder.Build();
@@ -83,5 +80,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
