@@ -7,11 +7,9 @@ namespace Movie.Repository
     {
         // Lấy tất cả người dùng với phân trang, tìm kiếm, và sắp xếp
         Task<ActionResult<IEnumerable<RequestUserDTO>>> GetAllUsersAsync(
-            string? search = null,
-            string sortBy = "id",
-            string sortDirection = "asc",
-            int page = 1,
-            int pageSize = 5
+            string? search = null,  
+            string sortBy = "id", 
+            string sortDirection = "asc" 
         );
 
         // Lấy thông tin người dùng theo ID
@@ -39,9 +37,8 @@ namespace Movie.Repository
         Task<List<RequestUserDTO>> GetUsersDeleteHistoryAsync(
             string? search = null,
             string sortBy = "id",
-            string sortDirection = "asc",
-            int page = 1,
-            int pageSize = 5
+            string sortDirection = "asc"
+
         );
 
         // Lưu thay đổi
@@ -49,5 +46,6 @@ namespace Movie.Repository
 
         // Đăng nhập người dùng và trả về token
         Task<string?> LoginUserAsync(string email, string password);
+      
     }
 }

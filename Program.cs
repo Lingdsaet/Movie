@@ -1,3 +1,5 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Movie.Models;
@@ -8,16 +10,16 @@ using Movie.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Th�m d?ch v? v�o container.
+// Thêm dịch vụ vào container.
 builder.Services.AddControllers();
 
 
-// Th�m Swagger cho OpenAPI
+// Thêm Swagger cho OpenAPI
 builder.Services.AddScoped<JwtService>(); // Register JwtService as Scoped
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
-// Th�m h? tr? file upload trong Swagger
+// Thêm hỗ trợ file upload trong Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Movie API", Version = "v1" });
@@ -27,15 +29,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-
-
-// ??c c?u h�nh t? appsettings.json
 IConfigurationRoot configuration = new ConfigurationBuilder()
     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 
-// C?u h�nh DbContext v?i SQL Server
 builder.Services.AddDbContext<movieDB>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("cnn")));
 
@@ -70,6 +68,7 @@ builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IUserUserRepository, UserUserRepository>();
 builder.Services.AddScoped<ContentRepository>();
 
 

@@ -17,7 +17,7 @@ namespace Movie.ControllerUser
         }
 
         [HttpPost("CommentMovie")]
-        public async Task<IActionResult> AddComment([FromForm] CreateCommentMovieDTO dto)
+        public async Task<IActionResult> AddComment([FromBody] CreateCommentMovieDTO dto)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Movie.ControllerUser
             }
         }
         [HttpPost("CommentSeries")]
-        public async Task<IActionResult> AddComment([FromForm] CreateCommentSeriesDTO dto)
+        public async Task<IActionResult> AddComment([FromBody] CreateCommentSeriesDTO dto)
         {
             try
             {

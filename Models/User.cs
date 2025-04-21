@@ -25,6 +25,7 @@ public partial class User
     [Column("CreatedDate")]
     public DateTime? CreatedDate { get; set; }
 
+    public bool Role {  get; set; }
     public int Status { get; set; }
 
     [InverseProperty("User")]

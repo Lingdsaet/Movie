@@ -6,6 +6,7 @@ using Movie.Service;
 using BCrypt.Net;
 using Microsoft.CodeAnalysis.Scripting;
 using Movie.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace Movie.Repository
 {
@@ -24,15 +25,10 @@ namespace Movie.Repository
         public async Task<ActionResult<IEnumerable<RequestUserDTO>>> GetAllUsersAsync(
             string? search = null,  // Tìm theo tên người dùng (Username)
             string sortBy = "id", // Trường sắp xếp (mặc định theo id)
-            string sortDirection = "asc", // Hướng phân loại (asc/desc)
-            int page = 1, // Số trang (mặc định là trang 1)
-            int pageSize = 5 // Số mục trên mỗi trang (mặc định là 5)
+            string sortDirection = "asc" // Hướng phân loại (asc/desc)
         )
         {
-            // Kiểm tra nếu page hoặc pageSize nhỏ hơn 1, đặt giá trị mặc định
-            if (page < 1) page = 1;
-            if (pageSize < 1) pageSize = 5;
-
+          
             // Khởi tạo query cơ bản cho bảng Users, bao gồm Payments 
             var query = _context.Users
                                .Where(u => u.Status == 1)  // Chỉ lấy người dùng có Status = 1
@@ -74,13 +70,9 @@ namespace Movie.Repository
                     break;
             }
 
-            // Lấy tổng số bản ghi để tính phân trang
-            var totalRecords = await query.CountAsync();
-
             // Phân trang: Skip và Take
             var users = await query
-                             .Skip((page - 1) * pageSize)
-                             .Take(pageSize)
+
                              .ToListAsync();
 
             var result = users.Select(u => new RequestUserDTO
@@ -93,21 +85,16 @@ namespace Movie.Repository
                 Status = u.Status
             }).ToList();
 
+          
+
             // Kiểm tra nếu không có người dùng nào
             if (!users.Any())
             {
                 return new NotFoundObjectResult(new { Message = "Không có người dùng nào được tìm thấy." });
             }
 
-            // Trả về dữ liệu với thông tin phân trang
-            return new OkObjectResult(new
-            {
-                TotalRecords = totalRecords,
-                Page = page,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
-                Users = result  // Trả lại danh sách người dùng đã được lọc
-            });
+            return result;
+
         }
 
         public async Task<RequestUserDTO> GetUserByIdAsync(int id)
@@ -188,6 +175,7 @@ namespace Movie.Repository
                 Email = email,
                 Password = hashedPassword,
                 CreatedDate = DateTime.Now,
+                Role = false,
                 Status = 1
             };
 
@@ -283,12 +271,10 @@ namespace Movie.Repository
         public async Task<List<RequestUserDTO>> GetUsersDeleteHistoryAsync(
             string? search = null,
             string sortBy = "id",
-            string sortDirection = "asc",
-            int page = 1,
-            int pageSize = 5)
+            string sortDirection = "asc"
+          )
         {
-            if (page < 1) page = 1;
-            if (pageSize < 1) pageSize = 5;
+         
 
             var query = _context.Users
                 .Where(u => u.Status == 0) // Lọc người dùng đã bị xóa
@@ -327,8 +313,7 @@ namespace Movie.Repository
 
             var totalRecords = await query.CountAsync();
             var users = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                
                 .ToListAsync();
 
             return users.Select(u => new RequestUserDTO
@@ -350,6 +335,10 @@ namespace Movie.Repository
 
         public async Task<string?> LoginUserAsync(string email, string password)
         {
+            var query = _context.Users
+                .Where(u => u.Status == 1)
+                .Where(u => u.Role == true)
+                .AsQueryable();
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -91,18 +91,38 @@ namespace Movie.Repository
 
         public async Task<IEnumerable<RequestMovieDTO>> GetActionMovieAsync()
         {
-            var query = _context.Movies
+            var query = await _context.Movies
                 .Where(m => m.Status == 1 && m.MovieCategories.Any(mc => mc.Categories.CategoryName == "Hành động"))
-                .OrderByDescending(m => m.YearReleased)
-                .Take(10);
+                .ToListAsync();
 
-            return await query.Select(movie => new RequestMovieDTO
+            var random = new Random();
+            var result = query.OrderBy(x => random.Next()).Take(10).ToList();
+           
+            return result.Select(movie => new RequestMovieDTO
             {
                 MovieId = movie.MovieId,
                 Title = movie.Title,
                 AvatarUrl = movie.AvatarUrl,
-            }).ToListAsync();
+            }).ToList();
         }
 
+        public async Task<IEnumerable<RequestSeriesDTO>> GetAnimeSeriesAsync()
+        {
+            var query = await _context.Series
+                .Where(m => m.Status == 1 && m.SeriesCategories.Any(mc => mc.Categories.CategoryName == "Anime"))
+                .Where(s => s.Status == 1 && s.IsHot == true)
+                .ToListAsync();
+
+            var random = new Random();
+            var result = query.OrderBy(x => random.Next()).Take(10).ToList();
+            return result.Select(series => new RequestSeriesDTO
+            {
+                SeriesId = series.SeriesId,
+                Title = series.Title,
+                PosterUrl = series.PosterUrl,
+                AvatarUrl = series.AvatarUrl,
+            }).ToList();
+
+        }
     }
 }

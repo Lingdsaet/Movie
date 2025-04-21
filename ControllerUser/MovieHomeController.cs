@@ -52,5 +52,12 @@ namespace Movie.ControllerUser
             var Movie = await _movieHomeRepository.GetActionMovieAsync();
             return Ok(Movie);
         }
+
+        [HttpGet("Anime")]
+        public async Task<IActionResult> GetAnimeMovie()
+        {
+            var Movie = await _movieHomeRepository.GetAnimeSeriesAsync();
+            return Ok(Movie);
+        }
     }
 }

@@ -8,14 +8,6 @@ public partial class RequestActorDTO
 
     public string NameAct { get; set; } = null!;
 
-    public string? Description { get; set; }
-
-    public string? Nationality { get; set; }
-
-    public string? Professional { get; set; }
-
-    public string? AvatarUrl { get; set; }
-
     public virtual ICollection<RequestMovieDTO> Movie { get; set; } = new List<RequestMovieDTO>();
 
     public virtual ICollection<Series> Series { get; set; } = new List<Series>();

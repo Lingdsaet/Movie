@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Movie.RequestDTO;
 
@@ -13,6 +13,6 @@ namespace Movie.Repository
         Task<IEnumerable<RequestMovieDTO>> GetHotMovieAsync();
         Task<IEnumerable<RequestSeriesDTO>> GetSeriesHotAsync();
         Task<IEnumerable<RequestMovieDTO>> GetActionMovieAsync();
-
+        Task<IEnumerable<RequestSeriesDTO>> GetAnimeSeriesAsync();
     }
 }

@@ -15,16 +15,10 @@ public partial class Director
     [StringLength(225)]
     public string NameDir { get; set; } = null!;
 
-    public string? Description { get; set; }
 
     [StringLength(100)]
     public string? Nationality { get; set; }
 
-    [StringLength(255)]
-    public string? Professional { get; set; }
-
-    [StringLength(255)]
-    public string? AvatarUrl { get; set; }
 
     [InverseProperty("Director")]
     public virtual ICollection<Movie> Movie { get; set; } = new List<Movie>();

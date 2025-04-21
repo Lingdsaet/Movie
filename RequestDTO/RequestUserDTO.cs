@@ -18,6 +18,7 @@ namespace Movie.Models
         [Required]
         [StringLength(100, MinimumLength = 6)]
         public string Password { get; set; } = null!;
+        public bool Role { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 

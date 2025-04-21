@@ -12,10 +12,9 @@ namespace Movie.Repository
 
         );
         Task<RequestActorDTO?> AdminGetActorByIdAsync(int id);
-        Task<RequestActorDTO> AddActorAsync(RequestActorDTO actorDTO, IFormFile? AvatarUrlFile);
-        Task<RequestActorDTO?> UpdateActorAsync(int id, RequestActorDTO actorDTO, IFormFile? AvatarUrlFile);
+        Task<RequestActorDTO> AddActorAsync(RequestActorDTO actorDTO);
+        Task<RequestActorDTO?> UpdateActorAsync(int id, RequestActorDTO actorDTO);
         Task<bool> DeleteActorAsync(int id);
-        Task<string> SaveFile(IFormFile file, string folderName);  // Phương thức mới
         Task<ActorDetailDTO?> GetActorByIdAsync(int id);
     }
 }

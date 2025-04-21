@@ -55,9 +55,9 @@ namespace Movie.ControllersAdmin
         }
 
         [HttpPost("AddActor")]
-        public async Task<IActionResult> AddActor([FromForm] RequestActorDTO actorDTO, IFormFile? AvatarUrlFile)
+        public async Task<IActionResult> AddActor([FromForm] RequestActorDTO actorDTO)
         {
-            var result = await _actorRepository.AddActorAsync(actorDTO, AvatarUrlFile);
+            var result = await _actorRepository.AddActorAsync(actorDTO);
             if (result == null)
                 return BadRequest("Lỗi khi thêm actor");
 
@@ -71,7 +71,7 @@ namespace Movie.ControllersAdmin
             [FromForm] RequestActorDTO actorDTO,
             IFormFile? AvatarUrlFile)
         {
-            var result = await _actorRepository.UpdateActorAsync(id, actorDTO, AvatarUrlFile);
+            var result = await _actorRepository.UpdateActorAsync(id, actorDTO);
             if (result == null)
                 return NotFound("Actor not found");
 

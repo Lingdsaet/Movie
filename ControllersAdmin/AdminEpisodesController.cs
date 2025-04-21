@@ -32,13 +32,6 @@ namespace Movie.Controllers
             return CreatedAtAction(nameof(GetEpisode), new { episodeId = result.EpisodeId }, result);
         }
 
-
-
-
-
-
-
-
         // GET: api/AdminEpisode/{episodeId}
         [HttpGet("{episodeId}")]
         public async Task<IActionResult> GetEpisode(int episodeId)
@@ -101,19 +94,19 @@ namespace Movie.Controllers
         }
 
 
-        //// DELETE: api/AdminEpisode/DeleteEpisode/{episodeId}
-        //[HttpDelete("DeleteEpisode/{episodeId}")]
-        //public async Task<IActionResult> DeleteEpisode(int episodeId)
-        //{
-        //    var episode = await _episodeRepo.GetByIdAsync(episodeId);
-        //    if (episode == null)
-        //    {
-        //        return NotFound("Tập phim không tồn tại");
-        //    }
+        // DELETE: api/AdminEpisode/DeleteEpisode/{episodeId}
+        [HttpDelete("DeleteEpisode/{episodeId}")]
+        public async Task<IActionResult> DeleteEpisode(int episodeId)
+        {
+            var episode = await _episodeRepo.GetByIdAsync(episodeId);
+            if (episode == null)
+            {
+                return NotFound("Tập phim không tồn tại");
+            }
 
-        //    await _episodeRepo.DeleteAsync(episodeId);
+            await _episodeRepo.DeleteAsync(episodeId);
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
     }
 }

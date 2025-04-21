@@ -1,6 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Movie.Models;
 using Movie.RequestDTO;
 using Movie.ResponseDTO;
@@ -12,12 +15,13 @@ namespace Movie.Repository
     {
         private readonly movieDB _context;
         private readonly IWebHostEnvironment _environment;
+        
         public MovieRepository(movieDB context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
         }
-
+        
         public async Task<RequestMovieDTO?> GetByIdAsync(int id)
         {
 
@@ -55,28 +59,36 @@ namespace Movie.Repository
             };
         }
 
+
         // Lưu ảnh vào thư mục chỉ định
         private async Task<string> SaveFileAsync(IFormFile file, string folderName)
         {
-            _environment.WebRootPath = "C:\\Vuejs\\BE\\be-base\\Assets\\";
-            if (file == null) return null;
+            if (file == null || file.Length == 0) return null;
 
-            var folderPath = Path.Combine(_environment.WebRootPath, "Assets", folderName);
-            if (!Directory.Exists(folderPath))
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "fir-9a230-firebase-adminsdk-ag0bw-44a83a0ff8.json");
+
+            if (FirebaseApp.DefaultInstance == null)
             {
-                Directory.CreateDirectory(folderPath);
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile(path)
+                });
             }
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(folderPath, fileName);
+            var credential = GoogleCredential.FromFile(path);
+            var storage = StorageClient.Create(credential);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            string bucketName = "fir-9a230.appspot.com";
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            string objectName = $"{folderName}/{fileName}";
+
+            using (var stream = file.OpenReadStream())
             {
-                await file.CopyToAsync(stream);
+                await storage.UploadObjectAsync(bucketName, objectName, file.ContentType, stream);
             }
 
-            // Lưu đường dẫn  
-            return $" https://source.cmcglobal.com.vn/g1/du1.33/be-base/-/raw/main/Assets/{folderName}/{fileName}";
+            string publicUrl = $"https://firebasestorage.googleapis.com/v0/b/{bucketName}/o/{Uri.EscapeDataString(objectName)}?alt=media";
+            return publicUrl;
         }
 
         //  Thêm phim
@@ -87,6 +99,7 @@ namespace Movie.Repository
 
             var movie = new Models.Movie
             {
+                MovieId = movieDTO.MovieId,
                 Title = movieDTO.Title,
                 Description = movieDTO.Description,
                 Rating = movieDTO.Rating,
@@ -96,6 +109,7 @@ namespace Movie.Repository
                 DirectorId = movieDTO.DirectorId,
                 IsHot = movieDTO.IsHot,
                 YearReleased = movieDTO.YearReleased,
+                Nation = movieDTO.Nation,
                 Status = 1
             };
 

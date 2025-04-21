@@ -8,14 +8,7 @@ public partial class RequestDirectorDTO
 
     public string NameDir { get; set; } = null!;
 
-    public string? Description { get; set; }
-
-
     public string? Nationality { get; set; }
-
-    public string? AvatarUrl { get; set; }
-
-    public string? Professional { get; set; }
 
 }
 public class DirectorMoviesDTO

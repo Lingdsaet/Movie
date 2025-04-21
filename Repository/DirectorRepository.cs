@@ -37,8 +37,7 @@ namespace Movie.Repository
                     DirectorID = director.DirectorId,
                     NameDir = director.NameDir,
                     Nationality = director.Nationality,
-                    AvatarUrl = director.AvatarUrl,
-                    Professional = director.Professional
+
                 },
                 Movies = director.Movie.Select(m => new DirectorMoviesDTO
                 {
@@ -71,7 +70,7 @@ namespace Movie.Repository
             // Tìm kiếm theo tên hoặc mô tả director
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(d => d.NameDir.Contains(search) || d.Nationality.Contains(search) || d.Description.Contains(search));
+                query = query.Where(d => d.NameDir.Contains(search) || d.Nationality.Contains(search) );
             }
 
             // Sắp xếp theo sortBy và sortDirection
@@ -104,52 +103,25 @@ namespace Movie.Repository
                     DirectorID = d.DirectorId,
                     NameDir = d.NameDir,
                     Nationality = d.Nationality,
-                    AvatarUrl = d.AvatarUrl,
-                    Description = d.Description
+
                 })
                 .ToListAsync();
 
             return directorDTOs;
         }
 
-        // Lưu ảnh vào thư mục chỉ định
-        private async Task<string> SaveFileAsync(IFormFile file, string folderName)
-        {
-            _environment.WebRootPath = "C:\\Users\\Admin\\source\\repos\\Movie\\Movie\\Assets\\";
-            if (file == null) return null;
-
-            var folderPath = Path.Combine(_environment.WebRootPath, "Directors", folderName);
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
-
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(folderPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            // Lưu đường dẫn  
-            return $" https://source.cmcglobal.com.vn/g1/du1.33/be-base/-/raw/main/Assets/{folderName}/{fileName}";
-        }
+        
 
 
         // Thêm mới một đạo diễn
         public async Task<RequestDirectorDTO> AddDirectorAsync(RequestDirectorDTO directorDTO, IFormFile? AvatarUrlFile)
         {
-            // Save avatar file if provided and set URL
-            var AvatarUrl = AvatarUrlFile != null ? await SaveFileAsync(AvatarUrlFile, "AvatarUrl") : null;
+
 
             var director = new Models.Director
             {
                 NameDir = directorDTO.NameDir,
-                Description = directorDTO.Description,
                 Nationality = directorDTO.Nationality,
-                AvatarUrl = AvatarUrl,  // Use the saved URL instead of DTO's original value
-                Professional = directorDTO.Professional
                 // Add other properties as needed
             };
 
@@ -158,7 +130,6 @@ namespace Movie.Repository
 
             // Update DTO with the new ID and URL
             directorDTO.DirectorID = director.DirectorId;  // Assuming DirectorId is the PK
-            directorDTO.AvatarUrl = AvatarUrl;
 
             return directorDTO;
         }
@@ -169,18 +140,8 @@ namespace Movie.Repository
             var director = await _context.Directors.FindAsync(id);
             if (director == null) return null;
 
-            // Nếu có file mới -> lưu lại ảnh và cập nhật đường dẫn
-            if (AvatarUrlFile != null)
-            {
-                var avatarUrl = await SaveFileAsync(AvatarUrlFile, "AvatarUrl");
-                director.AvatarUrl = avatarUrl;
-                directorDTO.AvatarUrl = avatarUrl;
-            }
-
             director.NameDir = directorDTO.NameDir;
-            director.Description = directorDTO.Description;
             director.Nationality = directorDTO.Nationality;
-            director.Professional = directorDTO.Professional;
 
             await _context.SaveChangesAsync();
 
