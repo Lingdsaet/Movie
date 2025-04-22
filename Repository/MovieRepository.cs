@@ -264,8 +264,10 @@ namespace Movie.Repository
             //  Sorting
             query = sortBy switch
             {
+                "MovieId" => query.OrderByDescending(m => m.MovieId),
                 "Title" => query.OrderBy(m => m.Title),
                 "Rating" => query.OrderByDescending(m => m.Rating),
+
                 _ => query.OrderBy(m => m.Title)
             };
 

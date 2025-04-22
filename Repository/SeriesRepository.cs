@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Storage.V1;
+using Microsoft.EntityFrameworkCore;
 using Movie.Models;
 using Movie.RequestDTO;
 using System;
@@ -126,25 +129,32 @@ namespace Movie.Repository
         // Lưu ảnh vào thư mục chỉ định
         private async Task<string> SaveFileAsync(IFormFile file, string folderName)
         {
-            _environment.WebRootPath = "C:\\Users\\lqvinh2\\Documents\\Movie-BE\\be-base\\Assets\\";
-            if (file == null) return null;
+            if (file == null || file.Length == 0) return null;
 
-            var folderPath = Path.Combine(_environment.WebRootPath, "Series", folderName);
-            if (!Directory.Exists(folderPath))
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "fir-9a230-firebase-adminsdk-ag0bw-44a83a0ff8.json");
+
+            if (FirebaseApp.DefaultInstance == null)
             {
-                Directory.CreateDirectory(folderPath);
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile(path)
+                });
             }
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(folderPath, fileName);
+            var credential = GoogleCredential.FromFile(path);
+            var storage = StorageClient.Create(credential);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            string bucketName = "fir-9a230.appspot.com";
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            string objectName = $"{folderName}/{fileName}";
+
+            using (var stream = file.OpenReadStream())
             {
-                await file.CopyToAsync(stream);
+                await storage.UploadObjectAsync(bucketName, objectName, file.ContentType, stream);
             }
 
-            // Lưu đường dẫn  
-            return $" https://source.cmcglobal.com.vn/g1/du1.33/be-base/-/raw/main/Assets/{folderName}/{fileName}";
+            string publicUrl = $"https://firebasestorage.googleapis.com/v0/b/{bucketName}/o/{Uri.EscapeDataString(objectName)}?alt=media";
+            return publicUrl;
         }
 
 
@@ -178,40 +188,7 @@ namespace Movie.Repository
             seriesDTO.PosterUrl = posterUrl;
             seriesDTO.AvatarUrl = avatarUrl;
 
-            //// 5. Thêm liên kết Category (nhiều-nhiều)
-            //if (!string.IsNullOrEmpty(seriesDTO.CategoriesIds))
-            //{
-            //    var categoryIds = seriesDTO.CategoriesIds
-            //        .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            //        .Select(id => int.Parse(id.Trim()));
-
-            //    foreach (var categoryId in categoryIds)
-            //    {
-            //        await _seriesCategoryRepo.AddAsync(new SeriesCategories
-            //        {
-            //            SeriesId = series.SeriesId,
-            //            CategoryId = categoryId
-            //        });
-            //    }
-            //}
-
-            //// 6. Thêm liên kết Actor (nhiều-nhiều)
-            //if (!string.IsNullOrEmpty(seriesDTO.ActorsIds))
-            //{
-            //    var actorIds = seriesDTO.ActorsIds
-            //        .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            //        .Select(id => int.Parse(id.Trim()));
-
-            //    foreach (var actorId in actorIds)
-            //    {
-            //        await _seriesActorRepo.AddAsync(new SeriesActors
-            //        {
-            //            SeriesId = series.SeriesId,
-            //            ActorId = actorId
-            //        });
-            //    } 
-
-            //}
+            
 
             //Xử lý thêm Category vào MovieCategory
             if (seriesDTO.CategoryIds != null && seriesDTO.CategoryIds.Any())
@@ -443,8 +420,7 @@ namespace Movie.Repository
 
             // Sorting
             query = sortBy switch
-            {
-                "SeriesId" => query.OrderBy(s => s.SeriesId),
+            {    
                 "Title" => query.OrderBy(s => s.Title),
                 "Rating" => query.OrderByDescending(s => s.Rating),
                 _ => query.OrderBy(s => s.Title)

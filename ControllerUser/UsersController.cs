@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Movie.Repository;
-using Movie.RequestDTO;
+using Movie.ResponseDTO;
 
- 
+
 namespace Movie.ControllerWeb
 {
     [ApiController]
@@ -18,17 +18,17 @@ namespace Movie.ControllerWeb
 
         // POST: api/User/SignUp
         [HttpPost("SignUp-User")]
-        public async Task<IActionResult> CreateUser([FromBody] RequestSignUpDTO user)
+        public async Task<IActionResult> CreateUser([FromBody] ResponseSignUpDTO user)
         {
             try
             {
                 var result = await _userRepository.RegisterAsync(user.UserName, user.Email, user.Password);
                 if (result == null)
                 {
-                    return BadRequest(new { message = "Email hoặc Username thằng khác đã dùng!" });
+                    return BadRequest(new { message = "Email hoặc Username đã có người dùng bạn nhá. Đặt lại đi!" });
                 }
 
-                return Ok(new { message = " Đăng ký xong rồi cook đi" });
+                return Ok(new { message = " Đăng ký ngon lành rồi nha bạn! Đăng nhập thôi 😘 " });
             }
             catch (ArgumentException ex)
             {
@@ -36,7 +36,7 @@ namespace Movie.ControllerWeb
             }
             catch (Exception)
             {
-                return StatusCode(500, new { message = "Đã xảy ra lỗi khi tạo người dùng." });
+                return StatusCode(500, new { message = "Khoan! Đăng ký lỗi rồi" });
             }
 
         }
@@ -45,18 +45,18 @@ namespace Movie.ControllerWeb
         // POST: api/User/login
         [HttpPost("login")]
 
-        public async Task<IActionResult> Login([FromBody] RequestLoginDTO user)
+        public async Task<IActionResult> Login([FromBody] ResponseLoginDTO user)
         {
             var result = await _userRepository.LoginAsync(user.Email, user.Password);
 
             if (result == null)
             {
-                return Unauthorized(new { message = "Sai email hoặc mật khẩu rồi cưng!" });
+                return Unauthorized(new { message = "Sai email hoặc mật khẩu rồi cưng!😏😏" });
             }
 
             return Ok(new
             {
-                message = "Đăng nhập thành công!",
+                message = "Đăng nhập thành công! Xem phim thôi 😍😍😍😍",
                 result.UserId,
                 result.UserName,
                 result.Email,
@@ -64,7 +64,20 @@ namespace Movie.ControllerWeb
                 result.CreatedDate
             });
         }
-       
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(string email, string newPassword)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound(new { Message = "Người dùng không tồn tại." });
+            }
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            await _userRepository.UpdateUserAsync(user.UserId, user.UserName, user.Email, hashedPassword);
+
+            return Ok(new { Message = "Mật khẩu đã được cập nhật thành công." });
+        }
+
     }
 
 }

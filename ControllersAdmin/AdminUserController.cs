@@ -1,13 +1,10 @@
-﻿
-using System.Drawing.Printing;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Movie.Repository;
-using Movie.RequestDTO;
 using Movie.Models;
+using Movie.ResponseDTO;
 
 namespace Movie.ControllersAdmin
 {
@@ -24,7 +21,7 @@ namespace Movie.ControllersAdmin
         // POST: api/User/login
         [HttpPost("login")]
 
-        public async Task<IActionResult> LoginUser(RequestUserDTO requestUser)
+        public async Task<IActionResult> LoginUser(LoginDTO requestUser)
 
         {
 
@@ -85,7 +82,7 @@ namespace Movie.ControllersAdmin
         }
         // POST: api/User/SignUp
         [HttpPost]
-        public async Task<ActionResult<RequestUserDTO>> CreateUser(RequestUserDTO requestUser)
+        public async Task<ActionResult<RequestUserDTO>> CreateUser(UserDTO requestUser)
         {
             try
             {
@@ -200,7 +197,6 @@ namespace Movie.ControllersAdmin
 
             return Ok(new { Message = "Xóa người dùng vĩnh viễn thành công." });
         }
-
 
     }
 }
