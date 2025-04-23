@@ -79,18 +79,15 @@ namespace Movie.Controllers
             return Ok(episodes);
         }
 
-        //// PUT: api/AdminEpisode/UpdateEpisode/{episodeId}
         // PUT: api/AdminEpisode/UpdateEpisode
         [HttpPut("UpdateEpisode")]
-        public async Task<IActionResult> UpdateEpisode([FromForm] RequestEpisodeDTO episodeDTO)
+        public async Task<IActionResult> UpdateLink(int seriesId, int episodeNumber, [FromForm] string newLink)
         {
-            var result = await _episodeRepo.UpdateEpisodeAsync(episodeDTO);
+            var result = await _episodeRepo.UpdateLinkAsync(seriesId, episodeNumber, newLink);
+            if (!result)
+                return NotFound("Không tìm thấy tập phim cần cập nhật");
 
-            // Kiểm tra kết quả trả về từ repository
-            if (result == null)
-                return NotFound(new { Message = "Tập phim không tồn tại." });
-
-            return Ok(result);  // Trả về kết quả đã được cập nhật
+            return Ok("Cập nhật link thành công");
         }
 
 

@@ -64,19 +64,7 @@ namespace Movie.ControllerWeb
                 result.CreatedDate
             });
         }
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(string email, string newPassword)
-        {
-            var user = await _userRepository.GetUserByEmailAsync(email);
-            if (user == null)
-            {
-                return NotFound(new { Message = "Người dùng không tồn tại." });
-            }
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
-            await _userRepository.UpdateUserAsync(user.UserId, user.UserName, user.Email, hashedPassword);
-
-            return Ok(new { Message = "Mật khẩu đã được cập nhật thành công." });
-        }
+        
 
     }
 

@@ -54,21 +54,19 @@ namespace Movie.Repository
         }
 
         // Cập nhật episode
-        public async Task<RequestEpisodeDTO?> UpdateEpisodeAsync(RequestEpisodeDTO episodeDTO)
+        public async Task<bool> UpdateLinkAsync(int seriesId, int episodeNumber, string newLink)
         {
-            // Kiểm tra xem Episode có tồn tại không
-            var episode = await _context.Episodes.FindAsync(episodeDTO.EpisodeId);
-            if (episode == null) return null;  // Nếu không tìm thấy episode, trả về null
+            var episode = await _context.Episodes
+                .FirstOrDefaultAsync(e => e.SeriesId == seriesId && e.EpisodeNumber == episodeNumber);
 
-            // Cập nhật các trường cần thiết
-            episode.EpisodeNumber = episodeDTO.EpisodeNumber;
-            episode.Title = episodeDTO.Title;
-            episode.LinkFilmUrl = episodeDTO.LinkFilmUrl;
+            if (episode == null)
+            {
+                return false;
+            }
 
-            // Lưu thay đổi vào DB
+            episode.LinkFilmUrl = newLink;
             await _context.SaveChangesAsync();
-
-            return episodeDTO;  // Trả lại DTO đã được cập nhật
+            return true;
         }
 
         public async Task DeleteAsync(int episodeId)

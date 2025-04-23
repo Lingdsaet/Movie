@@ -266,9 +266,8 @@ namespace Movie.Repository
             {
                 "MovieId" => query.OrderByDescending(m => m.MovieId),
                 "Title" => query.OrderBy(m => m.Title),
-                "Rating" => query.OrderByDescending(m => m.Rating),
 
-                _ => query.OrderBy(m => m.Title)
+                _ => query.OrderByDescending(m => m.MovieId)
             };
 
             var Movie = await query

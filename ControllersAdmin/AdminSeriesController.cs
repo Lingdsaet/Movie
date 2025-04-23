@@ -25,8 +25,8 @@ namespace Movie.ControllersAdmin
         [HttpGet]
         public async Task<ActionResult<PaginatedList<RequestSeriesDTO>>> GetSeries(
         string? search = null,
-        string sortBy = "Title",          // Sắp xếp theo tên series mặc định
-        string sortDirection = "asc"    // Hướng sắp xếp mặc định là tăng dần
+        string sortBy = "SeriesId",          // Sắp xếp theo tên series mặc định
+        string sortDirection = "desc"    // Hướng sắp xếp mặc định là tăng dần
 
 )
         {

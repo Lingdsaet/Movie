@@ -7,7 +7,5 @@ namespace Movie.Repository
     {
         Task<RequestUserDTO?> LoginAsync(string email, string password);
         Task<RequestUserDTO?> RegisterAsync(string username, string email, string password);
-        Task<RequestUserDTO?> UpdateUserAsync(int id, string username, string email, string password);
-        Task<RequestUserDTO> GetUserByEmailAsync(string email);
     }
 }

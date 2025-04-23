@@ -16,28 +16,59 @@ namespace Movie.Repository
         {
             _context = context;
         }
-        // home
+
         public async Task<IEnumerable<string>> GetRandomPostersAsync()
         {
+            // Lấy cố định 6 poster từ Movies
             var moviePosters = await _context.Movies
-                .Where(m => m.Status == 1 && m.PosterUrl != null)
-                .Where(m => !string.IsNullOrEmpty(m.PosterUrl))
+                .Where(m => m.Status == 1 && !string.IsNullOrEmpty(m.PosterUrl))
                 .Select(m => m.PosterUrl)
+                .Take(6)
                 .ToListAsync();
 
+            // Lấy cố định 6 poster từ Series
             var seriesPosters = await _context.Series
-                .Where(s => s.Status == 1 && s.PosterUrl != null)
-                .Where(s => !string.IsNullOrEmpty(s.PosterUrl))
+                .Where(s => s.Status == 1 && !string.IsNullOrEmpty(s.PosterUrl))
                 .Select(s => s.PosterUrl)
+                .Take(6)
                 .ToListAsync();
 
-            // Gộp lại và lấy random 3 poster
-            var allPosters = moviePosters.Concat(seriesPosters).ToList();
             var random = new Random();
-            var result = allPosters.OrderBy(x => random.Next()).Take(3).ToList();
 
-            return result;
+            // Chọn ngẫu nhiên 3 poster từ 6 poster của Movies
+            var selectedMovies = moviePosters.OrderBy(_ => random.Next()).Take(3).ToList();
+
+            // Chọn ngẫu nhiên 3 poster từ 6 poster của Series
+            var selectedSeries = seriesPosters.OrderBy(_ => random.Next()).Take(3).ToList();
+
+            // Hiển thị ngẫu nhiên **Movie hoặc Series**
+            var displayType = random.Next(2) == 0 ? selectedMovies : selectedSeries;
+
+            return displayType;
         }
+
+        // home
+        //public async Task<IEnumerable<string>> GetRandomPostersAsync()
+        //{
+        //    var moviePosters = await _context.Movies
+        //        .Where(m => m.Status == 1 && m.PosterUrl != null)
+        //        .Where(m => !string.IsNullOrEmpty(m.PosterUrl))
+        //        .Select(m => m.PosterUrl)
+        //        .ToListAsync();
+
+        //    var seriesPosters = await _context.Series
+        //        .Where(s => s.Status == 1 && s.PosterUrl != null)
+        //        .Where(s => !string.IsNullOrEmpty(s.PosterUrl))
+        //        .Select(s => s.PosterUrl)
+        //        .ToListAsync();
+
+        //    // Gộp lại và lấy random 3 poster
+        //    var allPosters = moviePosters.Concat(seriesPosters).ToList();
+        //    var random = new Random();
+        //    var result = allPosters.OrderBy(x => random.Next()).Take(3).ToList();
+
+        //    return result;
+        //}
         public async Task<IEnumerable<RequestMovieDTO>> GetNewMovieAsync()
         {
             var query = _context.Movies

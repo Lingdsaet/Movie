@@ -21,7 +21,7 @@ namespace Movie.ControllersAdmin
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestMovieDTO>>> GetMovie(
             int? categoryID = null,
-            string sortBy = "Title",
+            string sortBy = "MovieId",
             string search = ""
             )
         {

@@ -31,12 +31,16 @@ namespace Movie.Repository
         // Lấy danh sách series với phân trang, tìm kiếm và sắp xếp
         public async Task<PaginatedList<RequestSeriesDTO>> GetSeriesAsync(
             string? search = null,
-            string sortBy = "Title",          // Sắp xếp theo tên series mặc định
-            string sortDirection = "asc"     // Hướng sắp xếp mặc định là tăng dần
+            string sortBy = "SeriesId",          // Sắp xếp theo tên series mặc định
+            string sortDirection = "desc"     
 
         )
         {
-            var query = _context.Series.AsQueryable();
+            var query = _context.Series
+                .Include(s => s.Director)
+                .Include(s => s.SeriesActors).ThenInclude(ma => ma.Actors)
+                .Include(s => s.SeriesCategories).ThenInclude(mc => mc.Categories)
+                .Where(s => s.Status == 1); ;
 
             // Tìm kiếm theo tiêu đề
             if (!string.IsNullOrEmpty(search))
@@ -49,17 +53,15 @@ namespace Movie.Repository
             {
                 query = sortBy.ToLower() switch
                 {
-                    "rating" => query.OrderByDescending(s => s.Rating),
-                    "yearreleased" => query.OrderByDescending(s => s.YearReleased),
-                    _ => query.OrderByDescending(s => s.Title),
+                    "SeriesId" => query.OrderByDescending(s => s.SeriesId),
+                    _ => query.OrderByDescending(s => s.SeriesId),
                 };
             }
             else
             {
                 query = sortBy.ToLower() switch
                 {
-                    "rating" => query.OrderBy(s => s.Rating),
-                    "yearreleased" => query.OrderBy(s => s.YearReleased),
+                    "SeriesId" => query.OrderBy(s => s.SeriesId),
                     _ => query.OrderBy(s => s.Title),
                 };
             }
@@ -422,8 +424,8 @@ namespace Movie.Repository
             query = sortBy switch
             {    
                 "Title" => query.OrderBy(s => s.Title),
-                "Rating" => query.OrderByDescending(s => s.Rating),
-                _ => query.OrderBy(s => s.Title)
+                "SeriesId" => query.OrderByDescending(s => s.SeriesId),
+                _ => query.OrderByDescending(s => s.SeriesId)
             };
 
             var seriesList = await query
