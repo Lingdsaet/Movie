@@ -17,34 +17,26 @@ namespace Movie.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<string>> GetRandomPostersAsync()
+        public async Task<IEnumerable<string>> GetRandomPostersByIdAsync()
         {
-            // Lấy cố định 6 poster từ Movies
+            var MovieIds = new List<int> { 1, 2, 3, 4, 5, 6 };
+            var SeriesIds = new List<int> { 1, 2, 3, 4, 5, 6 };
+
             var moviePosters = await _context.Movies
-                .Where(m => m.Status == 1 && !string.IsNullOrEmpty(m.PosterUrl))
-                .Select(m => m.PosterUrl)
-                .Take(6)
+                .Where(m => MovieIds.Contains(m.MovieId) && m.Status == 1 && !string.IsNullOrEmpty(m.PosterUrl))
+                .Select(m => m.PosterUrl!)
                 .ToListAsync();
 
-            // Lấy cố định 6 poster từ Series
             var seriesPosters = await _context.Series
-                .Where(s => s.Status == 1 && !string.IsNullOrEmpty(s.PosterUrl))
-                .Select(s => s.PosterUrl)
-                .Take(6)
+                .Where(s => SeriesIds.Contains(s.SeriesId) && s.Status == 1 && !string.IsNullOrEmpty(s.PosterUrl))
+                .Select(s => s.PosterUrl!)
                 .ToListAsync();
 
             var random = new Random();
-
-            // Chọn ngẫu nhiên 3 poster từ 6 poster của Movies
             var selectedMovies = moviePosters.OrderBy(_ => random.Next()).Take(3).ToList();
-
-            // Chọn ngẫu nhiên 3 poster từ 6 poster của Series
             var selectedSeries = seriesPosters.OrderBy(_ => random.Next()).Take(3).ToList();
 
-            // Hiển thị ngẫu nhiên **Movie hoặc Series**
-            var displayType = random.Next(2) == 0 ? selectedMovies : selectedSeries;
-
-            return displayType;
+            return selectedMovies.Concat(selectedSeries);
         }
 
         // home

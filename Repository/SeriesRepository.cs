@@ -106,27 +106,28 @@ namespace Movie.Repository
             );
         }
 
-        // Lấy thông tin series theo ID
-        public async Task<RequestSeriesDTO?> AdminGetSeriesByIdAsync(int id)
-        {
-            var series = await _context.Series.FindAsync(id);
-            if (series == null) return null;
+        //// Lấy thông tin series theo ID
+        //public async Task<RequestSeriesDTO?> AdminGetSeriesByIdAsync(int id)
+        //{
+        //    var series = await _context.Series.FindAsync(id);
+        //    if (series == null) return null;
 
-            return new RequestSeriesDTO
-            {
-                SeriesId = series.SeriesId,
-                Title = series.Title,
-                Description = series.Description,
-                DirectorId = series.DirectorId,
-                Rating = series.Rating,
-                IsHot = series.IsHot ?? false, // Xử lý nullable
-                YearReleased = series.YearReleased,
-                PosterUrl = series.PosterUrl,
-                AvatarUrl = series.AvatarUrl,
-                Status = series.Status ?? 0, // Xử lý nullable
-                Season = series.Season
-            };
-        }
+        //    return new RequestSeriesDTO
+        //    {
+        //        SeriesId = series.SeriesId,
+        //        Title = series.Title,
+
+        //        Description = series.Description,
+        //        DirectorId = series.DirectorId,
+        //        Rating = series.Rating,
+        //        IsHot = series.IsHot ?? false, // Xử lý nullable
+        //        YearReleased = series.YearReleased,
+        //        PosterUrl = series.PosterUrl,
+        //        AvatarUrl = series.AvatarUrl,
+        //        Status = series.Status ?? 0, // Xử lý nullable
+        //        Season = series.Season
+        //    };
+        //}
 
         // Lưu ảnh vào thư mục chỉ định
         private async Task<string> SaveFileAsync(IFormFile file, string folderName)
@@ -370,6 +371,9 @@ namespace Movie.Repository
                 Title = series.Title,
                 YearReleased = series.YearReleased,
                 Nation = series.Nation ?? string.Empty,
+                DirectorId= series.DirectorId,
+                PosterUrl= series.PosterUrl,
+                AvatarUrl=series.AvatarUrl,
                 Rating= series.Rating,
                 Season= series.Season,
                 IsHot= series.IsHot,

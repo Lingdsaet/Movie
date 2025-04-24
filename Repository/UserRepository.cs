@@ -145,7 +145,7 @@ namespace Movie.Repository
             };
         }
 
-        public async Task<RequestUserDTO?> CreateUserAsync(string username, string email, string password)
+        public async Task<RequestUserDTO?> CreateUserAsync(string username, string email, string password, bool role)
         {
             // Kiểm tra nếu email đã tồn tại
             if (_context.Users.Any(u => u.Email == email))
@@ -175,7 +175,7 @@ namespace Movie.Repository
                 Email = email,
                 Password = hashedPassword,
                 CreatedDate = DateTime.Now,
-                Role = false,
+                Role = role,
                 Status = 1
             };
 
@@ -187,7 +187,8 @@ namespace Movie.Repository
                 UserId = user.UserId,
                 UserName = user.UserName,
                 Email = user.Email,
-                CreatedDate = user.CreatedDate
+                CreatedDate = user.CreatedDate,
+                Role = user.Role
             };
         }
 
@@ -335,11 +336,9 @@ namespace Movie.Repository
 
         public async Task<string?> LoginUserAsync(string email, string password)
         {
-            var query = _context.Users
-                .Where(u => u.Status == 1)
-                .Where(u => u.Role == true)
-                .AsQueryable();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users
+                 .Where(u => u.Email == email && u.Status == 1 && u.Role == true)
+                 .FirstOrDefaultAsync();
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {

@@ -43,11 +43,13 @@ namespace Movie.Repository
                 PosterUrl = movie.PosterUrl,
                 AvatarUrl = movie.AvatarUrl,
                 LinkFilmUrl = movie.LinkFilmUrl,
+                Nation = movie.Nation,
                 IsHot = movie.IsHot,
                 YearReleased = movie.YearReleased,
                 Categories = movie.MovieCategories
                     .Select(sc => new RequestCategoryDTO
                     {
+                        CategoryId = sc.Categories.CategoryId,
                         CategoryName = sc.Categories.CategoryName
                     }).ToList(),
                 Actors = movie.MovieActor.Select(sa => new RequestActorDTO
@@ -55,7 +57,8 @@ namespace Movie.Repository
                     ActorId = sa.ActorId,
                     NameAct = sa.Actors.NameAct
                 }).ToList(),
-                Director = movie.Director?.NameDir ?? string.Empty
+                Director = movie.Director?.NameDir ?? string.Empty,
+                DirectorId = movie.DirectorId
             };
         }
 

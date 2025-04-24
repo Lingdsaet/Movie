@@ -8,11 +8,12 @@ namespace Movie.Repository
     public interface IMovieHome
     {
         //Home
-        Task<IEnumerable<string>> GetRandomPostersAsync();
+        Task<IEnumerable<string>> GetRandomPostersByIdAsync();
         Task<IEnumerable<RequestMovieDTO>> GetNewMovieAsync();
         Task<IEnumerable<RequestMovieDTO>> GetHotMovieAsync();
         Task<IEnumerable<RequestSeriesDTO>> GetSeriesHotAsync();
         Task<IEnumerable<RequestMovieDTO>> GetActionMovieAsync();
         Task<IEnumerable<RequestSeriesDTO>> GetAnimeSeriesAsync();
+      
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Movie.Models;
 using Movie.Repository;
+using Movie.ResponseDTO;
 
 
 namespace Movie.ControllerUser
@@ -14,12 +16,12 @@ namespace Movie.ControllerUser
         {
             _movieHomeRepository = movieHomeRepository;
         }
-        // Lấy poster
-        [HttpGet("Poster")]
-        public async Task<IActionResult> GetPosterAsync()
+        
+        [HttpGet("GetPosters")]
+        public async Task<IActionResult> GetPosters()
         {
-            var poster = await _movieHomeRepository.GetRandomPostersAsync();
-            return Ok(poster);
+            var posters = await _movieHomeRepository.GetRandomPostersByIdAsync();
+            return Ok(posters);
         }
         // Lấy danh sách phim mới
         [HttpGet("new")]

@@ -56,7 +56,7 @@ namespace Movie.ControllersAdmin
         }
 
         // GET: api/Users
-        [HttpGet]
+        [HttpGet("List")]
         public async Task<ActionResult<IEnumerable<RequestUserDTO>>> GetUsers(
             string? search = null,
             string sortBy = "id",
@@ -80,29 +80,23 @@ namespace Movie.ControllersAdmin
 
             return Ok(user);
         }
-        // POST: api/User/SignUp
-        [HttpPost]
-        public async Task<ActionResult<RequestUserDTO>> CreateUser(UserDTO requestUser)
+        // Fixed the invalid expression term ')' by removing the trailing comma in the method call.
+       
+        [HttpPost("CreateUser")]
+        public async Task<IActionResult> CreateUser([FromForm] UserDTO dto)
         {
-            try
-            {
-                var createdUser = await _userRepository.CreateUserAsync(requestUser.UserName, requestUser.Email, requestUser.Password);
+            
+            bool role = bool.Parse(dto.Role); 
+            var result = await _userRepository.CreateUserAsync(dto.UserName, dto.Email, dto.Password, role);
 
-                if (createdUser == null)
-                {
-                    return BadRequest(new { Message = "Tên tài khoản hoặc email đã tồn tại." });
-                }
+            if (result == null)
+                return BadRequest("Email hoặc Username đã tồn tại.");
 
-                return CreatedAtAction(nameof(GetUsers), new { id = createdUser.UserId }, createdUser);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
+            return Ok(result);
         }
 
         // PUT: api/Users/{id}
-        [HttpPut("{id}")]
+        [HttpPut("UpdateUser/{id}")]
         public async Task<IActionResult> UpdateUser(
         int id,
         string username,

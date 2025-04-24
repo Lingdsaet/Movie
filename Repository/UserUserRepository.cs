@@ -68,11 +68,9 @@ namespace Movie.Repository
         public async Task<RequestUserDTO?> LoginAsync(string email, string password)
         {
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            var query = _context.Users
-                .Where(u => u.Status == 1)
-                .Where(u => u.Role == false)  
-                .AsQueryable();
+            var user = await _context.Users
+                .Where(u => u.Email == email && u.Status == 1 && u.Role == false)
+                .FirstOrDefaultAsync();
 
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))

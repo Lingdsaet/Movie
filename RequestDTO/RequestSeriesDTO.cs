@@ -41,10 +41,6 @@ namespace Movie.RequestDTO
         [Range(1, int.MaxValue, ErrorMessage = "Mùa phải là số dương")]
         public int? Season { get; set; }
 
-        //public IFormFile PosterFile { get; set; }  // Thuộc tính nhận tệp Poster
-
-        //public IFormFile AvatarFile { get; set; }  // Thuộc tính nhận tệp Avatar 
-
 
         public virtual ICollection<RequestEpisodeDTO> Episode { get; set; } = new List<RequestEpisodeDTO>();
 
@@ -52,16 +48,6 @@ namespace Movie.RequestDTO
 
         public virtual ICollection<RequestCategoryDTO> Categories { get; set; } = new List<RequestCategoryDTO>();
 
-        //public List<RequestCategoryDTO> Categories { get; set; } = new List<RequestCategoryDTO>();
-
-        //public List<RequestActorDTO> Actors { get; set; } = new List<RequestActorDTO> { };
-
-        //public List<RequestEpisodeDTO> Episode { get; set; } = new List<RequestEpisodeDTO>();
+     
     }
-}
-public class ActorDTO
-{
-    public int ActorId { get; set; }
-
-    public string NameAct { get; set; }
 }

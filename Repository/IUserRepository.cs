@@ -22,7 +22,7 @@ namespace Movie.Repository
         Task<RequestUserDTO> GetUserByEmailAsync(string email);
 
         // Tạo mới một người dùng
-        Task<RequestUserDTO?> CreateUserAsync(string username, string email, string password);
+        Task<RequestUserDTO?> CreateUserAsync(string username, string email, string password, bool role);
 
         // Cập nhật thông tin người dùng
         Task<RequestUserDTO?> UpdateUserAsync(int id, string username, string email, string password);
